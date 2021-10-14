@@ -1,8 +1,8 @@
-import { hasOwnMetadata } from 'core-js/fn/reflect'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/components/Home'
-import AllCountries from '@/components/AllCountries'
+import Home from '@/pages/Home'
+import AllCountries from '@/pages/AllCountries'
+import Country from '@/pages/Country'
 
 Vue.use(VueRouter)
 
@@ -20,6 +20,12 @@ export default new VueRouter({
             // snake_case is most common for names
             name: 'all_countries',
             component: AllCountries,
+        },
+        {
+            path: '/countries/:country',
+            // snake_case is most common for names
+            name: 'country',
+            component: Country,
         }
     ]
 })
