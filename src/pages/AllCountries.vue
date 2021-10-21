@@ -9,8 +9,9 @@
 </template>
 
 <script>
-    import axios, { Axios } from 'axios'
+    // import axios, { Axios } from 'axios'
     import CountryViewer from '@/components/CountryViewer'
+    import api from '../classes/Request'
 
     export default{
         name: 'AllCountries',
@@ -23,14 +24,7 @@
             }
         },
         mounted(){
-            axios.get('https://restcountries.com/v3.1/all')
-                .then(response =>{
-                    console.log(response.data)
-                    this.countries = response.data
-                })
-                // first parameter of catch is always error, but we can name it whatever we want
-                // obviously it just makes sense to call it 'error'
-                .catch(error => console.log(error))
+            this.countries = api.getCountries()
         }
     }
 </script>
