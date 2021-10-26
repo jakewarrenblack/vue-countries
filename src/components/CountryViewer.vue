@@ -1,9 +1,17 @@
 <template>
-    <div class="countryContain">
-        <p class="flag">{{ country.flag}}</p>
-        <div class="nameContainer"><b>Name:</b><router-link :to="{name: 'country', params: {country: country.name.official}}"> {{ country.name.common }}</router-link></div>        
-        <div><b>Capital:</b> {{country.capital[0] }}</div>
-    </div>    
+        <div class="card" style="width: 12rem;">
+        <img class="card-img-top" :src="`${country.flags.png}`" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">
+                <b>Name:</b>
+                <router-link :to="{name: 'country', params: {country: country.name.official}}"> {{ country.name.common }}</router-link>
+            </h5>
+            <h5 class="card-title">
+                <b>Capital:</b>
+                {{country.capital[0] }}
+            </h5>
+        </div>
+    </div>
 </template>
 
 <script>
