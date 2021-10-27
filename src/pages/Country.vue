@@ -10,11 +10,12 @@
                     <h4>Fullname: {{ country[0].name.official }}</h4>
                     <ul class="small-country-info">
                         <h6 class="small-country-info-header">Currencies: </h6>
-                            <h6 v-for="currency in currencies" :key="currency">{{ `${currencies.indexOf(currency) == 0 && currencies.length > 1 ? currency + ', ' : currency}` }} </h6>
+                        <!-- show commas after every language, .length -1 check is useful for countries with lots of languages, eg. Switzerland -->
+                        <h6 v-for="currency in currencies" :key="currency">{{ `${currencies.indexOf(currency) == 0 && currencies.length > 1 ? currency + ', ' : currency}` }} </h6>
                     </ul>
                     <ul class="small-country-info">
                         <h6 class="small-country-info-header">Languages: </h6>
-                        <h6 v-for="language in languages" :key="language">{{ `${languages.indexOf(language) == 0 && languages.length > 1 ? language + ', ' : language}` }} </h6>
+                        <h6 v-for="language in languages" :key="language">{{ `${languages.indexOf(language) != languages.length-1 && languages.length > 1 ? language + ', ' : language}` }} </h6>
                     </ul>
                 </b-col>
             </b-row>
@@ -77,7 +78,8 @@
                     >
                     <h1>{{ newsItem.author }}</h1>
                     <h4>{{ newsItem.headline }} </h4>
-                    <img :src="`${newsItem.image}`" style="max-height: 20rem; width: 100%;object-fit: cover;" />
+                    <!-- not all news articles have images, show placeholder instead -->
+                    <img :src="`${newsItem.image ? newsItem.image : require(`@/assets/placeholder.png`)}`" style="max-height: 20rem; width: 100%;object-fit: cover;" />
                     </b-card>
                     </b-col>
                 </div>     
@@ -102,6 +104,17 @@
                 languageCode: String
             }
         },
+        // I was forcing a ui update this way, but switched to passing a :key to the router-view in App.vue
+        
+        // beforeRouteUpdate(to, from, next){
+        //     console.log('ROUTE UPDATE')
+        //     console.log('TO: ' + to)
+        //     console.log('FROM: ' + from)
+        //     console.log(next)
+        //     ///this.$route.params.country = to.params.country
+        //     console.log('PARAMS')
+        //     next()
+        // },
         methods: {
             getCountries(){
                 axios.get(`https://restcountries.com/v3.1/name/${this.$route.params.country}/?fullText=true`)

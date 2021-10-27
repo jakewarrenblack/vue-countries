@@ -30,7 +30,7 @@
                 countries: []
             }
         },
-     mounted(){
+    mounted(){
             axios.get('https://restcountries.com/v3.1/all').then(response =>{
             console.log(response.data)
             // this.countries = response.data
