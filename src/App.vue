@@ -21,4 +21,8 @@ export default {
 </script>
 
 <style>
+@font-face{
+  font-family: "Alegreya Sans Bold";
+  src: url('./assets/fonts/AlegreyaSans/AlegreyaSans-Bold.ttf');
+}
 </style>

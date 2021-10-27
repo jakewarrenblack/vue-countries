@@ -6,6 +6,24 @@ import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 Vue.config.productionTip = false
 
+// importing icons for weather
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSnowflake, faSun, faCloudSun, faCloudMoon, faCloud, faMoon, faCloudRain, faCloudShowersHeavy, faSmog, faBolt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faSnowflake)
+library.add(faSun)
+library.add(faCloudSun)
+library.add(faCloudMoon)
+library.add(faCloud)
+library.add(faMoon)
+library.add(faCloudRain)
+library.add(faCloudShowersHeavy)
+library.add(faSmog)
+library.add(faBolt)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 // const COUNTRIES_URL = 'https://restcountries.com/v3.1'
