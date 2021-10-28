@@ -43,16 +43,29 @@
               // we take the search term and make a request to axios with it,
               // this way, we can see if it's a valid country or not,
               // and our catch will keep us on the current page if something goes wrong
-              axios.get(`https://restcountries.com/v3.1/name/${this.search_term}/?fullText=true`)
-              .then(response =>{
-                this.$router.push(`/countries/${response.data[0].name.common}`)    
-                // the form's default behaviour is to refresh the page on submit
-                // i'm preventing this behaviour and calling this function on submit instead
-                // i did this because the page refresh cleared axios' data and caused it to abort its request
-                // this preventDefault would break the search on the single country page, if we weren't tying the route's full path to the router-view in App.vue       
-                // In the case of a single country, Vue just sees that we're going from one 'country' component to another 'country' component, so doesn't bother updating
-                // we have to force it to update based on the change made to the params in the url
-              })
+              
+              // we can search for a country or a subregion
+              const countrySearch = axios.get(`https://restcountries.com/v3.1/name/${this.search_term}/?fullText=true`)
+              const regionSearch = axios.get(`https://restcountries.com/v3.1/subregion/${this.$route.params.subregion}`)
+              Promise.allSettled([countrySearch, regionSearch])
+              .then(axios.spread((...responses) =>{
+                const countryResponse = responses[0]
+                const regionResponse = responses[1]
+
+                console.log(countryResponse)
+
+                countryResponse.status == 'fulfilled' ? this.$router.push(`/countries/${countryResponse.value.data[0].name.common}`) : '';
+                regionResponse.status == 'fulfilled' ? this.$router.push(`/countries//subregion/${this.search_term}`) : ''
+              }))
+              // .then(response =>{
+              //   this.$router.push(`/countries/${response.data[0].name.common}`)    
+              //   // the form's default behaviour is to refresh the page on submit
+              //   // i'm preventing this behaviour and calling this function on submit instead
+              //   // i did this because the page refresh cleared axios' data and caused it to abort its request
+              //   // this preventDefault would break the search on the single country page, if we weren't tying the route's full path to the router-view in App.vue       
+              //   // In the case of a single country, Vue just sees that we're going from one 'country' component to another 'country' component, so doesn't bother updating
+              //   // we have to force it to update based on the change made to the params in the url
+              // })
               .catch(function(error){
                 console.log(error);
                 alert('Sorry, that country name is invalid.')
