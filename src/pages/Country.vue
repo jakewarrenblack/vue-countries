@@ -212,7 +212,7 @@
                         var headline = (response.data.articles[i].title)
                         var author = response.data.articles[i].source.name
                         var img = response.data.articles[i].urlToImage
-                        obj['headline'] = headline
+                        obj['headline'] = this.translate(headline)
                         obj['author'] = author
                         obj['image'] = img
                         
@@ -225,9 +225,10 @@
                 })
                 .catch(error => console.log(error))
             },
-            translate(query){
+            async translate(query){
                 // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
-                this.languageCode.toString() === 'fra' ? this.languageCode = 'fr' : ''
+                this.languageCode.toString().toLowerCase() === 'fra' ? this.languageCode = 'fr' : ''
+                this.languageCode.toString().toLowerCase() === 'deu' ? this.languageCode = 'de' : ''
                 // mt = machine translation enabled
                 // de = an email to reach the user, mainly for commercial stuff
                 var options = {
@@ -240,7 +241,9 @@
                 }
                 };
 
-                axios.request(options).then(function (response) {
+                await axios.request(options).then(function (response) {
+                    console.log(response.data)
+                    console.log(response.data.matches[0].translation)
                     return response.data.matches[0].translation
                 }).catch(function (error) {
                     console.error(error);
