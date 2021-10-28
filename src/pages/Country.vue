@@ -96,8 +96,8 @@
                 </div>     
             </b-row>
 
-            <h1 class="mt-5 mb-4" v-if="news.length > 0">Headlines in {{ country[0].name.common }} </h1>
-            <b-row v-if="news.length > 0" cols="2">               
+            <h1 class="mt-5 mb-4" v-if="news">Headlines in {{ country[0].name.common }} </h1>
+            <b-row v-if="news" cols="2">               
                 <div style="margin-bottom: 2rem" v-for="newsItem in news" :key="newsItem.headline">
                     <b-col>
                     <b-card
@@ -177,7 +177,7 @@
                 .catch(error => console.log(error))
             },
             getImage(country){
-                 axios.get(`https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country[0].name.common}`)
+                axios.get(`https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country[0].name.common}`)
                 .then(response =>{
                     this.heroImageSrc = response.data.results[0].urls.full
                 })
@@ -201,8 +201,8 @@
                 })
                 .catch(error => console.log(error))
             },
-            getNews(countryCode){
-                axios.get(`https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=75e99a70acd44c50bb02cee29552e58c`)
+            async getNews(countryCode){
+                await axios.get(`https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=75e99a70acd44c50bb02cee29552e58c`)
                 .then(response => {
 
                     var tempArticles = []
@@ -212,16 +212,17 @@
                         var headline = (response.data.articles[i].title)
                         var author = response.data.articles[i].source.name
                         var img = response.data.articles[i].urlToImage
-                        obj['headline'] = this.translate(headline)
+                        obj['headline'] = headline
                         obj['author'] = author
                         obj['image'] = img
                         
                         tempArticles.push(obj);
                     }
 
-                    this.news = tempArticles
-
-                    console.log(this.news)
+                    //this.news = tempArticles
+                    console.log(response)
+                    this.translate(tempArticles)
+                    //return tempArticles
                 })
                 .catch(error => console.log(error))
             },
@@ -231,23 +232,30 @@
                 this.languageCode.toString().toLowerCase() === 'deu' ? this.languageCode = 'de' : ''
                 // mt = machine translation enabled
                 // de = an email to reach the user, mainly for commercial stuff
-                var options = {
-                method: 'GET',
-                url: 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get',
-                params: {langpair: `${this.languageCode}|en`, q: `${query}`, mt: '1', onlyprivate: '0', de: 'a@b.c'},
-                headers: {
-                    'x-rapidapi-host': 'translated-mymemory---translation-memory.p.rapidapi.com',
-                    'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
-                }
-                };
 
-                await axios.request(options).then(function (response) {
-                    console.log(response.data)
-                    console.log(response.data.matches[0].translation)
-                    return response.data.matches[0].translation
-                }).catch(function (error) {
-                    console.error(error);
-                });
+                // loop through the articles
+                for(var q of query){
+                    var options = {
+                        method: 'GET',
+                        url: 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get',
+                        params: {langpair: `${this.languageCode}|en`, q: `${q['headline']}`, mt: '1', onlyprivate: '0', de: 'a@b.c'},
+                        headers: {
+                            'x-rapidapi-host': 'translated-mymemory---translation-memory.p.rapidapi.com',
+                            'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
+                        }
+                    };
+
+                    await axios.request(options).then(function (response) {
+                        console.log(q['headline'])
+                        q['headline'] = response.data.matches[0].translation
+                    }).catch(function (error) {
+                        console.error(error);
+                    });
+                }
+                this.news = query;
+                for(var j=0; j<this.articles.length; j++){
+                    console.log(this.articles[j])
+                }
             },
             getWeather(){
                 const icons = new Map([
@@ -272,20 +280,20 @@
                 );
 
                 var latlng = this.country[0].latlng
-                console.log(latlng)
-                console.log(icons)
+                //console.log(latlng)
+                //console.log(icons)
                 axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latlng[0]}&lon=${latlng[1]}&units=metric&appid=c87affa6dd76959b48d86866074f44e4`)
                 .then(response => {
-                    console.log(response.data)
+                    //console.log(response.data)
                     var owIcon = response.data.weather[0].icon;
                     this.weatherDescription = response.data.weather[0].description;
                     this.temp = response.data.main.temp
-                    console.log(owIcon)
+                    //console.log(owIcon)
 
                     for(let [key, value] of icons.entries()){
-                        console.log(key + value);
+                        //console.log(key + value);
                         if(key == owIcon){
-                            console.log('MATCH')
+                            //console.log('MATCH')
                             this.icon = value;
                         }
                     }
@@ -294,9 +302,10 @@
                 
             }
         },
-        mounted(){
-            this.getCountries()
-                
+        async mounted(){
+            await this.getCountries()
+            //await this.getNews(this.country[0].cca2)
+            //await this.translate(this.getNews(this.country[0].cca2))
         }
     }
 </script>
