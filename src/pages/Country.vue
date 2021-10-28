@@ -63,7 +63,7 @@
                     <b-card
                     img-top
                     tag="article"
-                    style=""
+                    style="height:25rem;"
                     class="mb-2"
                     >
                     <h2>{{ event.name }} </h2>
@@ -86,7 +86,7 @@
                     <b-card
                     img-top
                     tag="article"
-                    style=";"
+                    style="height:25rem;"
                     class="mb-2"
                     >
                     <h2>{{ food.strMeal }} </h2>
@@ -98,18 +98,20 @@
 
             <h1 class="mt-5 mb-4" v-if="news">Headlines in {{ country[0].name.common }} </h1>
             <b-row v-if="news" cols="2">               
-                <div style="margin-bottom: 2rem" v-for="newsItem in news" :key="newsItem.headline">
+                <div style="margin-bottom: 2rem; align-items-stretch" v-for="newsItem in news" :key="newsItem.headline">
                     <b-col>
                     <b-card
                     img-top
                     tag="article"
-                    style=";"
+                    style="height:25rem;"
                     class="mb-2"
                     >
-                    <h1>{{ newsItem.author }}</h1>
-                    <h4>{{ newsItem.headline }} </h4>
+                    <h1 style="height:20%;">{{ newsItem.author }}</h1>
+                    <h4 style="height:20%;">{{ newsItem.headline }} </h4>
                     <!-- not all news articles have images, show placeholder instead -->
-                    <img :src="`${newsItem.image ? newsItem.image : require(`@/assets/placeholder.png`)}`" style="max-height: 20rem; width: 100%;object-fit: cover;" />
+                    <div style="height:55%;">
+                        <img :src="`${newsItem.image ? newsItem.image : require(`@/assets/placeholder.png`)}`" style="height:100%; width: 100%;object-fit: cover;" />
+                    </div>
                     </b-card>
                     </b-col>
                 </div>     
@@ -179,7 +181,8 @@
             getImage(country){
                 axios.get(`https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country[0].name.common}`)
                 .then(response =>{
-                    this.heroImageSrc = response.data.results[0].urls.full
+                    // 'full' is the hq option, but takes a while to load
+                    this.heroImageSrc = response.data.results[0].urls.regular
                 })
                 .catch(error => console.log(error))
             },
@@ -259,6 +262,7 @@
             },
             getWeather(){
                 const icons = new Map([
+                    // openweathermap icon codes to correspond to fontawesome icon names
                     ['01d','sun'],
                     ['01n','moon'],
                     ['02d','sun'],

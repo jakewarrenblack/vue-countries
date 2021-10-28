@@ -102,7 +102,7 @@
         var that = this;
           await axios.get(`https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country}`)
             .then(function(response){
-                  var imageSrc = response.data.results[0].urls.full
+                  var imageSrc = response.data.results[0].urls.regular
                   that.finalCountries.set(country, imageSrc)
                 }
             )

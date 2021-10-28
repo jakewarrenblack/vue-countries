@@ -4,36 +4,47 @@
         <br>
         <b-container fluid class="bv-example-row mb-3">
             <b-row cols="5" class=" mx-auto w-75">
-                <b-col>
-                    <Card 
-                    title="Europe" 
-                    body="test" 
-                    filename="europe.jpg" />
-                </b-col>                
-                <b-col>
-                    <Card 
-                    title="Africa" 
-                    body="test" 
-                    filename="africa.jpg" />
-                </b-col>
-                <b-col>
-                    <Card 
-                    title="Asia" 
-                    body="test" 
-                    filename="asia.jpg" />
-                </b-col>
-                <b-col>
-                    <Card 
-                    title="Americas" 
-                    body="test" 
-                    filename="americas.jpg" />
-                </b-col>
-                <b-col>
-                    <Card 
-                    title="Australia" 
-                    body="test" 
-                    filename="australia.jpg" />
-                </b-col>
+                <router-link :to="{name: 'sub_region', params: {subregion: 'europe'}}">
+                    <b-col>
+                        <Card 
+                        title="Europe" 
+                        body="test" 
+                        filename="europe.jpg" 
+                        />
+                    </b-col>   
+                </router-link>
+                <router-link :to="{name: 'sub_region', params: {subregion: 'africa'}}">             
+                    <b-col>
+                        <Card 
+                        title="Africa" 
+                        body="test" 
+                        filename="africa.jpg" />
+                    </b-col>
+                </router-link>
+                <router-link :to="{name: 'sub_region', params: {subregion: 'asia'}}">
+                    <b-col>
+                        <Card 
+                        title="Asia" 
+                        body="test" 
+                        filename="asia.jpg" />
+                    </b-col>
+                </router-link>
+                <router-link :to="{name: 'sub_region', params: {subregion: 'americas'}}">
+                    <b-col>
+                        <Card 
+                        title="Americas" 
+                        body="test" 
+                        filename="americas.jpg" />
+                    </b-col>
+                </router-link>
+                <router-link :to="{name: 'sub_region', params: {subregion: 'australia'}}">
+                    <b-col>
+                        <Card 
+                        title="Australia" 
+                        body="test" 
+                        filename="australia.jpg" />
+                    </b-col>
+                </router-link>
             </b-row>
         </b-container>
     </div>    
