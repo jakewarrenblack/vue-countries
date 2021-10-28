@@ -33,7 +33,7 @@
               v-model="search_term"
               size="sm"
               class="mr-sm-2"
-              placeholder="Search"
+              placeholder="Country or region"
             ></b-form-input>
             <b-button size="sm" class="my-2 my-sm-0" type="submit"
               >Search</b-button
