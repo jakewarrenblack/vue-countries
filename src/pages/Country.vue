@@ -142,6 +142,24 @@
 
       <!-- the news takes some time to load and then translate to English, so show a loader in the mean time -->
       <!-- otherwise the user might not even know there should be news -->
+      <b-alert
+        :show="dismissCountDown"
+        dismissible
+        variant="warning"
+        @dismissed="dismissCountDown = 0"
+        @dismiss-count-down="countDownChanged"
+      >
+        <p>
+          News could not be loaded. This message will disappear in
+          {{ dismissCountDown }} seconds...
+        </p>
+        <b-progress
+          variant="warning"
+          :max="dismissSecs"
+          :value="dismissCountDown"
+          height="4px"
+        ></b-progress>
+      </b-alert>
       <div v-if="newsLoading" class="d-flex mt-5 mb-5">
         <h3 class="me-5">News is loading...</h3>
         <div class="loader" />
@@ -203,6 +221,9 @@ export default {
       weatherDescription: String,
       temp: Number,
       newsLoading: false,
+      showDismissableAlert: false,
+      dismissSecs: 5,
+      dismissCountDown: 0,
       mapSrc: String,
     };
   },
@@ -218,6 +239,12 @@ export default {
   //     next()
   // },
   methods: {
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs;
+    },
     getCountries() {
       axios
         .get(
@@ -297,15 +324,38 @@ export default {
         .catch((error) => console.log(error));
     },
     async getNews(countryCode) {
+      var that = this;
       this.newsLoading = true;
       await axios
         .get(
           `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=75e99a70acd44c50bb02cee29552e58c`
         )
         .then((response) => {
+          /* I may have to remove this, not sure. */
+          /* Don't want it to continue loading if the news is **never** going to load. */
+          /* Eg, if there's no news for a country or if the rate limit has been reached. */
+          // response.status != "fulfilled" ? (this.newsLoading = false) : "";
           var tempArticles = [];
 
+          // if (response.articles.length == 0) {
+          //   this.newsLoading = false;
+          //   // alert("News could not be loaded");
+          //   // this.showDismissableAlert = true;
+          //   this.showAlert();
+          //   return;
+          // }
+          console.log(response.data);
+          console.log(response.data.articles);
+
           for (var i = 0; i < 4; i++) {
+            if (
+              response.data.articles[i] == null ||
+              response.data.articles[i] == undefined
+            ) {
+              this.showAlert();
+              this.newsLoading = false;
+              return;
+            }
             var obj = {};
             var headline = response.data.articles[i].title;
             var author = response.data.articles[i].source.name;
@@ -314,23 +364,23 @@ export default {
             obj["author"] = author;
             obj["image"] = img;
 
-            /* I may have to remove this, not sure. */
-            /* Don't want it to continue loading if the news is **never** going to load. */
-            /* Eg, if there's no news for a country or if the rate limit has been reached. */
-            // response.status != "fulfilled" ? (this.newsLoading = false) : "";
-
             tempArticles.push(obj);
           }
 
           //this.news = tempArticles
-          //console.log(response);
+          console.log(response);
+          console.log(response.status);
+
           this.translate(tempArticles);
           console.log(response);
           //return tempArticles
         })
         .catch(function(error) {
           console.log(error);
-          this.newsLoading = false;
+          that.newsLoading = false;
+          that.showAlert();
+          // alert("News could not be loaded");
+          return;
         });
     },
     async translate(query) {
@@ -388,7 +438,8 @@ export default {
               // replace special chars
               .replace("&quot;", '"')
               .replace("&#39;", "'")
-              .replace("&quot; ", '"');
+              .replace("&quot; ", '"')
+              .replace("&#39; ", "'");
           })
           .catch(function(error) {
             console.error(error);
@@ -396,6 +447,7 @@ export default {
       }
       this.newsLoading = false;
       this.news = query;
+      console.log(this.news);
       //   for (var j = 0; j < this.articles.length; j++) {
       //     console.log(this.articles[j]);
       //   }
@@ -464,6 +516,11 @@ h5,
 h6 {
   font-family: "Alegreya Sans Bold";
 }
+
+h1 {
+  padding-left: 0;
+}
+
 .w-60 {
   width: 60% !important;
 }
