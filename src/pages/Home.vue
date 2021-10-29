@@ -84,5 +84,7 @@ h1 {
 .carousel-item img {
   height: 100%;
   object-fit: cover;
+  /* so you can see the nav easily */
+  filter: brightness(0.75);
 }
 </style>

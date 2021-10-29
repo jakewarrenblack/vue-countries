@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand class="ms-5" href="#">NavBar</b-navbar-brand>
+  <div class="d-flex justify-content-center">
+    <b-navbar class="w-75 mx-auto" toggleable="lg" type="dark" variant="info">
+      <b-navbar-brand class="ms-5" href="#"
+        ><img :src="require(`@/assets/restapi-planet.svg`)"
+      /></b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -35,9 +37,9 @@
               class="mr-sm-2"
               placeholder="Country or region"
             ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit"
-              >Search</b-button
-            >
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">
+              <font-awesome-icon class="fa-icon" :icon="`${this.icon}`" />
+            </b-button>
           </b-nav-form>
         </b-navbar-nav>
       </b-collapse>
@@ -53,6 +55,7 @@ export default {
   data() {
     return {
       search_term: "",
+      icon: "search",
     };
   },
   methods: {
@@ -118,8 +121,31 @@ export default {
 form {
   display: flex;
 }
+a {
+  color: white;
+}
 
-@media screen and(min-width:1000px) {
+div {
+  background: #183a37;
+}
+
+.navbar {
+  /* overriding some bootstrap nav defaults to style it according to our figma design */
+  min-height: 5rem;
+  font-family: "Alegreya Sans Bold";
+  padding: 2rem 0;
+
+  /* position: absolute !important; */
+  /* top: 0 !important;
+  z-index: 2 !important; */
+  /* width: 100% !important; */
+}
+
+.bg-info {
+  background: #183a37 !important;
+}
+
+@media screen and (min-width: 992px) {
   .navbar {
     position: relative;
   }

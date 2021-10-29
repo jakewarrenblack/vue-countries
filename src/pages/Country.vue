@@ -470,6 +470,8 @@ h6 {
 
 .main-head {
   font-size: 4rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .region {
   color: #1f7584;

@@ -20,9 +20,11 @@ import {
   faCloudShowersHeavy,
   faSmog,
   faBolt,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+/* for weather on single country pages */
 library.add(faSnowflake);
 library.add(faSun);
 library.add(faCloudSun);
@@ -33,6 +35,9 @@ library.add(faCloudRain);
 library.add(faCloudShowersHeavy);
 library.add(faSmog);
 library.add(faBolt);
+
+/* for navbar */
+library.add(faSearch);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
