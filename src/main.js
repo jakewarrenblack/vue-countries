@@ -1,36 +1,49 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
-import "bootstrap/dist/css/bootstrap.css"
-import "bootstrap-vue/dist/bootstrap-vue.css"
-Vue.config.productionTip = false
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import VuePaginate from "vue-paginate";
+Vue.config.productionTip = false;
 
 // importing icons for weather
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSnowflake, faSun, faCloudSun, faCloudMoon, faCloud, faMoon, faCloudRain, faCloudShowersHeavy, faSmog, faBolt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faSnowflake,
+  faSun,
+  faCloudSun,
+  faCloudMoon,
+  faCloud,
+  faMoon,
+  faCloudRain,
+  faCloudShowersHeavy,
+  faSmog,
+  faBolt,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faSnowflake)
-library.add(faSun)
-library.add(faCloudSun)
-library.add(faCloudMoon)
-library.add(faCloud)
-library.add(faMoon)
-library.add(faCloudRain)
-library.add(faCloudShowersHeavy)
-library.add(faSmog)
-library.add(faBolt)
+library.add(faSnowflake);
+library.add(faSun);
+library.add(faCloudSun);
+library.add(faCloudMoon);
+library.add(faCloud);
+library.add(faMoon);
+library.add(faCloudRain);
+library.add(faCloudShowersHeavy);
+library.add(faSmog);
+library.add(faBolt);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
-Vue.use(BootstrapVue)
-Vue.use(IconsPlugin)
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
+Vue.use(VuePaginate);
 // const COUNTRIES_URL = 'https://restcountries.com/v3.1'
 
 // Vue.mixin({
 //   methods: {
-//     getCountries: async function(params = null){       
+//     getCountries: async function(params = null){
 //         axios.get(`${COUNTRIES_URL}/all${params ? params : ''}`).then(response =>{
 //             console.log(response.data)
 //             // this.countries = response.data
@@ -62,5 +75,5 @@ Vue.use(IconsPlugin)
 
 new Vue({
   router,
-  render: h => h(App),
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

@@ -118,4 +118,22 @@ export default {
 form {
   display: flex;
 }
+
+@media screen and(min-width:1000px) {
+  .navbar {
+    position: relative;
+  }
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px !important;
+    display: block;
+  }
+  ul.navbar-nav:nth-child(1) {
+    position: absolute;
+    left: 95%;
+    margin-left: -50px !important;
+    display: flex;
+  }
+}
 </style>

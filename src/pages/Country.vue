@@ -1,23 +1,12 @@
 <template>
   <div>
     <b-container>
-      <b-row align-h="between" class="mx-auto mt-5">
+      <b-row cols-md="2" cols-sm="1" align-h="between" class="mx-auto mt-5">
         <b-col>
-          <!-- these are just here for reference -->
-          <!-- <font-awesome-icon class="fa-icon" icon="snowflake"/> -->
-          <!-- <font-awesome-icon class="fa-icon" icon="sun"/>
-        <font-awesome-icon class="fa-icon" icon="cloud-sun"/>
-        <font-awesome-icon class="fa-icon" icon="cloud-moon"/>
-        <font-awesome-icon class="fa-icon" icon="cloud"/>
-        <font-awesome-icon class="fa-icon" icon="moon"/>
-        <font-awesome-icon class="fa-icon" icon="cloud-rain"/>
-        <font-awesome-icon class="fa-icon" icon="cloud-showers-heavy"/>
-        <font-awesome-icon class="fa-icon" icon="bolt"/>
-        <font-awesome-icon class="fa-icon" icon="smog"/> -->
           <h2 class="region">{{ country[0].continents[0] }}</h2>
           <h1 class="main-head">{{ country[0].name.common }}</h1>
         </b-col>
-        <b-col class="d-flex flex-column align-items-end">
+        <b-col class="d-flex flex-column country-details">
           <h4>Fullname: {{ country[0].name.official }}</h4>
 
           <ul class="small-country-info">
@@ -50,7 +39,7 @@
 
           <div
             v-if="this.weatherDescription"
-            class="d-flex w-60 h-100 justify-content-end align-items-end mb-4"
+            class="weather d-flex h-100 justify-content-end align-items-end mb-4"
           >
             <div class="w-100 d-flex justify-content-between align-items-end">
               <font-awesome-icon class="fa-icon" :icon="`${this.icon}`" />
@@ -76,7 +65,7 @@
         <b-col>
           <iframe
             width="100%"
-            height="450"
+            height="auto"
             style="border:0; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             border-radius: 11px;
             margin: 2rem 0;
@@ -95,7 +84,12 @@
       <h1 class="mt-5 mb-4" v-if="events.length > 0">
         Events in {{ country[0].name.common }}
       </h1>
-      <b-row v-if="events.length > 0" cols="2">
+      <b-row
+        class="d-flex justify-content-center"
+        v-if="events.length > 0"
+        cols-sm="1"
+        cols-md="2"
+      >
         <div
           style="margin-bottom: 2rem"
           v-for="event in events"
@@ -123,7 +117,12 @@
       <h1 class="mt-5 mb-4" v-if="foods.length > 0">
         Popular food in {{ country[0].name.common }}
       </h1>
-      <b-row v-if="foods.length > 0" cols="2">
+      <b-row
+        class="d-flex justify-content-center"
+        v-if="foods.length > 0"
+        cols-sm="1"
+        cols-md="2"
+      >
         <div
           style="margin-bottom: 2rem"
           v-for="food in foods"
@@ -150,7 +149,12 @@
       <h1 class="mt-5 mb-4" v-if="news.length > 0">
         Headlines in {{ country[0].name.common }}
       </h1>
-      <b-row v-if="news.length > 0" cols="2">
+      <b-row
+        class="d-flex justify-content-center"
+        v-if="news.length > 0"
+        cols-sm="1"
+        cols-md="2"
+      >
         <div
           style="margin-bottom: 2rem; align-items-stretch"
           v-for="newsItem in news"
@@ -245,6 +249,7 @@ export default {
         // obviously it just makes sense to call it 'error'
         .catch((error) => console.log(error));
     },
+    // unsplash is sometimes throwing a 403 forbidden, switch to pexels in that case
     getImage(country) {
       axios
         .get(
@@ -254,7 +259,20 @@ export default {
           // 'full' is the hq option, but takes a while to load
           this.heroImageSrc = response.data.results[0].urls.regular;
         })
-        .catch((error) => console.log(error));
+        .catch(function(error) {
+          console.log(error);
+          axios({
+            headers: {
+              Authorization:
+                "563492ad6f917000010000017537530b7b0b4f148a82df455487e0f1",
+            },
+          })
+            .get(`https://api.pexels.com/v1/search?query=test?query=${country}`)
+            .then(function(response) {
+              console.log("pexels response:");
+              console.log(response);
+            });
+        });
     },
     getEvents(countryCode) {
       axios
@@ -328,6 +346,12 @@ export default {
       this.languageCode.toString().toLowerCase() == "ell"
         ? (this.languageCode = "gr")
         : "";
+
+      //chinese
+      this.languageCode.toString().toLowerCase() == "zho"
+        ? (this.languageCode = "ch")
+        : "";
+
       // mt = machine translation enabled
       // de = an email to reach the user, mainly for commercial stuff
 
@@ -445,7 +469,7 @@ h6 {
 }
 
 .main-head {
-  font-size: 8rem;
+  font-size: 4rem;
 }
 .region {
   color: #1f7584;
@@ -463,11 +487,16 @@ ul {
   margin-bottom: 0;
 }
 
+.country-details {
+  align-items: flex-start;
+}
+
 .hero-image {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 11px;
   margin: 2rem 0;
-  height: 40rem;
+  width: 100%;
+  height: auto;
 }
 
 .fa-icon {
@@ -488,12 +517,30 @@ ul {
   animation: spin 2s linear infinite;
 }
 
+/* for the loader */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+.weather {
+  width: 100%;
+}
+
+/* phones, tablets */
+@media screen and (min-width: 768px) {
+  .weather {
+    width: 60%;
+  }
+  .main-head {
+    font-size: 8rem;
+  }
+  .country-details {
+    align-items: flex-end;
   }
 }
 </style>
