@@ -46,6 +46,7 @@
               }}
             </h6>
           </ul>
+          <h6>Capital: {{ country[0].capital[0] }}</h6>
 
           <div
             v-if="this.weatherDescription"
@@ -70,13 +71,24 @@
         </b-col>
       </b-row>
 
+      <!-- google maps iframe embed -->
       <b-row>
         <b-col>
-          <!-- <div class="d-flex w-25 justify-content-between align-items-center">                 
-                        <font-awesome-icon class="fa-icon" :icon="`${this.icon}`"/>
-                        <h4>{{ this.temp + '°C' }}</h4>
-                        <h4 class="weatherDescription">{{ this.weatherDescription }}</h4>
-                    </div> -->
+          <iframe
+            width="100%"
+            height="450"
+            style="border:0; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 11px;
+            margin: 2rem 0;
+            height: 40rem;"
+            loading="lazy"
+            allowfullscreen
+            :src="
+              `https://www.google.com/maps/embed/v1/place?key=AIzaSyDZsVIH2Ih31ik3Xq7a9ZIJBv-JkbKIDGA%20%20%20%20
+            &q=${country[0].name.common}`
+            "
+          >
+          </iframe>
         </b-col>
       </b-row>
 
@@ -187,6 +199,7 @@ export default {
       weatherDescription: String,
       temp: Number,
       newsLoading: false,
+      mapSrc: String,
     };
   },
   // I was forcing a ui update this way, but switched to passing a :key to the router-view in App.vue
@@ -219,6 +232,9 @@ export default {
           this.languageCode = Object.keys(response.data[0].languages);
 
           this.country = response.data;
+
+          console.log(this.country);
+
           this.getImage(this.country);
           this.getEvents(this.country[0].cca2);
           this.getFood(this.country[0].demonyms.eng.m);
@@ -280,23 +296,37 @@ export default {
             obj["author"] = author;
             obj["image"] = img;
 
+            /* I may have to remove this, not sure. */
+            /* Don't want it to continue loading if the news is **never** going to load. */
+            /* Eg, if there's no news for a country or if the rate limit has been reached. */
+            // response.status != "fulfilled" ? (this.newsLoading = false) : "";
+
             tempArticles.push(obj);
           }
 
           //this.news = tempArticles
-          console.log(response);
+          //console.log(response);
           this.translate(tempArticles);
+          console.log(response);
           //return tempArticles
         })
-        .catch((error) => console.log(error));
+        .catch(function(error) {
+          console.log(error);
+          this.newsLoading = false;
+        });
     },
     async translate(query) {
       // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
-      this.languageCode.toString().toLowerCase() === "fra"
+      this.languageCode.toString().toLowerCase() == "fra"
         ? (this.languageCode = "fr")
         : "";
-      this.languageCode.toString().toLowerCase() === "deu"
+      this.languageCode.toString().toLowerCase() == "deu"
         ? (this.languageCode = "de")
+        : "";
+
+      //greek
+      this.languageCode.toString().toLowerCase() == "ell"
+        ? (this.languageCode = "gr")
         : "";
       // mt = machine translation enabled
       // de = an email to reach the user, mainly for commercial stuff
@@ -325,7 +355,10 @@ export default {
         await axios
           .request(options)
           .then(function(response) {
-            console.log(q["headline"]);
+            //console.log(q["headline"]);
+            console.log("MATCHES:");
+            console.log(response.data);
+            console.log(response.data.matches);
             q["headline"] = response.data.matches[0].translation;
             q["headline"] = q["headline"]
               // replace special chars
@@ -339,9 +372,9 @@ export default {
       }
       this.newsLoading = false;
       this.news = query;
-      for (var j = 0; j < this.articles.length; j++) {
-        console.log(this.articles[j]);
-      }
+      //   for (var j = 0; j < this.articles.length; j++) {
+      //     console.log(this.articles[j]);
+      //   }
     },
     getWeather() {
       const icons = new Map([
