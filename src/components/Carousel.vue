@@ -133,42 +133,49 @@ export default {
         .catch((error) => console.log(error));
     },
     async getImages(country) {
+      // if the call to unsplash fails, it will call to pexels instead
       var that = this;
       await axios
         .get(
           `https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country}`
         )
         .then(function(response) {
-          var imageSrc = response.data.results[0].urls.regular;
+          console.log(response);
+          var imageSrc = response.data.results[0].urls.full;
           that.finalCountries.set(country, imageSrc);
         })
         .catch(function(error) {
           console.log(error);
-          // call to pexels instead
-          // unsplash has good photos but rate limited to 50 per hour, pexels is 200
-          axios({
-            headers: {
-              Authorization:
-                "563492ad6f917000010000017537530b7b0b4f148a82df455487e0f1",
-            },
-          })
-            .get(`https://api.pexels.com/v1/search?query=test?query=${country}`)
-            .then(function(response) {
-              console.log(response);
+          //call to pexels instead
+          //unsplash has good photos but rate limited to 50 per hour, pexels is 200
+          const URL = `https://api.pexels.com/v1/search?query=${country}&per_page=4&orientation=landscape`;
+          const API_KEY = `563492ad6f91700001000001660dc6de6e62494da4a3601ccfc6ecc3`;
+
+          axios
+            .get(URL, {
+              headers: { Authorization: `Bearer ${API_KEY}` },
             })
-            .catch(function(error) {
-              console.log(error);
-            });
+            .then((response) => {
+              console.log(response);
+              for (var i = 0; i < response.data.photos.length; i++) {
+                that.finalCountries.set(
+                  country,
+                  response.data.photos[i].src.large2x
+                );
+              }
+              console.log(that.finalCountries);
+            })
+            .catch((error) => console.log(error));
         });
       this.finalCountriesArray = Array.from(this.finalCountries);
     },
   },
   mounted() {
     this.getRandomCountries(), console.log(Array.from(this.placeholders));
-    for (var item of this.placeholders) {
-      console.log(item[0]);
-      console.log(item[1]);
-    }
+    // for (var item of this.placeholders) {
+    //   console.log(item[0]);
+    //   console.log(item[1]);
+    // }
   },
 };
 </script>
