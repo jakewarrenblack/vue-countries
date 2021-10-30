@@ -71,9 +71,9 @@ h1 {
   transform: translateY(-10px);
 }
 .carousel-caption {
-  bottom: 25% !important;
+  bottom: 37% !important;
   text-align: left !important;
-  font-size: 5rem !important;
+  font-size: 2.5rem !important;
   font-family: "Alegreya sans bold" !important;
 }
 
@@ -86,5 +86,12 @@ h1 {
   object-fit: cover;
   /* so you can see the nav easily */
   filter: brightness(0.75);
+}
+
+/* phones, tablets */
+@media screen and (min-width: 768px) {
+  .carousel-caption {
+    font-size: 5rem !important;
+  }
 }
 </style>
