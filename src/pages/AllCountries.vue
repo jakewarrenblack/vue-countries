@@ -12,7 +12,7 @@
         class="paginate-list"
       >
         <b-row
-          class="d-flex justify-content-center"
+          class="d-flex justify-content-center mt-4"
           cols-sm="1"
           cols-md="3"
           cols-lg="4"
@@ -66,17 +66,19 @@ export default {
       paginate: ["countries"],
     };
   },
+  methods: {
+    getCountries() {
+      axios
+        .get("https://restcountries.com/v3.1/all")
+        .then((response) => {
+          console.log(response.data);
+          this.countries = response.data;
+        })
+        .catch((error) => console.log(error));
+    },
+  },
   mounted() {
-    axios
-      .get("https://restcountries.com/v3.1/all")
-      .then((response) => {
-        console.log(response.data);
-        // this.countries = response.data
-        this.countries = response.data;
-      })
-      // first parameter of catch is always error, but we can name it whatever we want
-      // obviously it just makes sense to call it 'error'
-      .catch((error) => console.log(error));
+    this.getCountries();
   },
 };
 </script>
@@ -87,7 +89,7 @@ export default {
   display: flex;
   justify-content: space-evenly;
   font-size: 2rem;
-  color: rgb(115, 210, 241);
+  color: #1f7584;
 }
 .mylinks:hover {
   cursor: pointer;

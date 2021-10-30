@@ -60,6 +60,53 @@
         </b-col>
       </b-row>
 
+      <h1 class="mt-5 mb-4" v-if="events.length > 0">
+        Attractions in {{ country[0].name.common }}
+      </h1>
+
+      <paginate
+        name="attractions"
+        :list="attractions"
+        :per="1"
+        class="paginate-list"
+      >
+        <b-row>
+          <b-col
+            v-for="attraction in paginated('attractions')"
+            :key="attraction.xid"
+          >
+            <b-card no-body class="overflow-hidden" style="max-height:25rem">
+              <b-row no-gutters>
+                <b-col md="6">
+                  <b-card-img
+                    :src="`${attraction.preview.source}`"
+                    alt="Image"
+                    class="rounded-0"
+                  ></b-card-img>
+                </b-col>
+                <b-col md="6">
+                  <b-card-body :title="`${attraction.name}`">
+                    <b-card-text>
+                      {{ attraction.wikipedia_extracts.text }}
+                    </b-card-text>
+                  </b-card-body>
+                </b-col>
+              </b-row>
+            </b-card>
+          </b-col>
+        </b-row>
+      </paginate>
+      <b-row class="d-flex justify-content-center">
+        <paginate-links
+          class="w-25 mylinks"
+          for="attractions"
+          :simple="{
+            prev: '« Back',
+            next: 'Next »',
+          }"
+        ></paginate-links>
+      </b-row>
+
       <!-- google maps iframe embed -->
       <b-row>
         <b-col>
@@ -225,6 +272,8 @@ export default {
       dismissSecs: 5,
       dismissCountDown: 0,
       mapSrc: String,
+      attractions: [],
+      paginate: ["attractions"],
     };
   },
   // I was forcing a ui update this way, but switched to passing a :key to the router-view in App.vue
@@ -267,10 +316,11 @@ export default {
           console.log(this.country);
 
           this.getImage(this.country);
+          this.getWeather();
+          this.getAttractions();
           this.getEvents(this.country[0].cca2);
           this.getFood(this.country[0].demonyms.eng.m);
           this.getNews(this.country[0].cca2);
-          this.getWeather();
         })
         // first parameter of catch is always error, but we can name it whatever we want
         // obviously it just makes sense to call it 'error'
@@ -385,25 +435,25 @@ export default {
     },
     async translate(query) {
       // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
-      this.languageCode.toString().toLowerCase() == "fra"
+      this.languageCode[0].toString().toLowerCase() == "fra"
         ? (this.languageCode = "fr")
         : "";
-      this.languageCode.toString().toLowerCase() == "deu"
+      this.languageCode[0].toString().toLowerCase() == "deu"
         ? (this.languageCode = "de")
         : "";
 
       //greek
-      this.languageCode.toString().toLowerCase() == "ell"
+      this.languageCode[0].toString().toLowerCase() == "ell"
         ? (this.languageCode = "gr")
         : "";
 
       //chinese
-      this.languageCode.toString().toLowerCase() == "zho"
+      this.languageCode[0].toString().toLowerCase() == "zho"
         ? (this.languageCode = "ch")
         : "";
 
       //austria - german
-      this.languageCode.toString().toLowerCase() == "bar"
+      this.languageCode[0].toString().toLowerCase() == "bar"
         ? (this.languageCode = "de")
         : "";
 
@@ -500,6 +550,53 @@ export default {
               this.icon = value;
             }
           }
+        })
+        .catch((error) => console.log(error));
+    },
+    async getAttractions() {
+      // I was doing this by coords, but changing to use capitals
+      // Coords works for small, densely-populated countries like Ireland or the UK, but not for a country like Australia, for example, where the middle of the country is basically wasteland
+      var myAttractions = [];
+      var myLatLng = [];
+
+      console.log("getattractions is running");
+      // specififying data from wikidata only, most others seem to often not have names
+
+      // STEP 1 - SEARCH FOR THE PLACENAME
+      await axios
+        .get(
+          `https://api.opentripmap.com/0.1/en/places/geoname?name=${this.country[0].capital[0]}&country=${this.country[0].cca2}&apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
+        )
+        .then((response) => {
+          //console.log(response);
+          myLatLng.push(response.data.lat, response.data.lon);
+        })
+        .catch((error) => console.log(error));
+
+      // STEP 2 - SEARCH FOR THE ATTRACTIONS
+      console.log(myLatLng);
+      await axios
+        .get(
+          `https://api.opentripmap.com/0.1/en/places/radius?radius=48280.32&lon=${myLatLng[1]}&lat=${myLatLng[0]}&limit=10&src_geom=wikidata&src_attr=wikidata&limit=10&rate=3&limit=6&apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
+        )
+        .then((response) => {
+          //console.log(response);
+          myAttractions = response.data.features;
+
+          // STEP 3 - DETAILED WIKIPEDIA SEARCH FOR THE ATTRACTIONS
+          //  ---------------------inner call ------------------------------
+          for (var i = 0; i < myAttractions.length; i++) {
+            axios
+              .get(
+                `https://api.opentripmap.com/0.1/en/places/xid/${myAttractions[i].properties.xid}?apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
+              )
+              .then((response) => {
+                console.log(response);
+                this.attractions.push(response.data);
+              })
+              .catch((error) => console.log(error));
+          }
+          //  ---------------------inner call ------------------------------
         })
         .catch((error) => console.log(error));
     },
@@ -607,5 +704,21 @@ ul {
   .country-details {
     align-items: flex-end;
   }
+}
+
+.mylinks {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 2rem;
+  color: #1f7584;
+}
+.mylinks:hover {
+  cursor: pointer;
+}
+
+.paginate-list {
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>
