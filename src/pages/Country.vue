@@ -402,6 +402,11 @@ export default {
         ? (this.languageCode = "ch")
         : "";
 
+      //austria - german
+      this.languageCode.toString().toLowerCase() == "bar"
+        ? (this.languageCode = "de")
+        : "";
+
       // mt = machine translation enabled
       // de = an email to reach the user, mainly for commercial stuff
 
@@ -555,7 +560,8 @@ ul {
   border-radius: 11px;
   margin: 2rem 0;
   width: 100%;
-  height: auto;
+  height: 45rem;
+  object-fit: cover;
 }
 
 .fa-icon {

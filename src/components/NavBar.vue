@@ -17,6 +17,8 @@
               >All</router-link
             ></b-nav-item
           >
+
+          <b-nav-item @click="getRandomCountry()" href="#">Random</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -59,6 +61,17 @@ export default {
     };
   },
   methods: {
+    getRandomCountry() {
+      axios
+        .get("https://restcountries.com/v3.1/all")
+        .then((response) => {
+          var randomCountry =
+            response.data[Math.floor(Math.random() * response.data.length)];
+
+          this.$router.push(`/countries/${randomCountry.name.common}`);
+        })
+        .catch((error) => console.log(error));
+    },
     search() {
       if (!this.search_term) {
         alert("Please enter a search term");
@@ -121,8 +134,12 @@ export default {
 form {
   display: flex;
 }
-a {
-  color: white;
+a,
+.nav-link {
+  color: white !important;
+}
+.nav-link:hover {
+  text-decoration: underline;
 }
 
 div {
