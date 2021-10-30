@@ -29,7 +29,7 @@
           </b-col>
         </router-link>
         <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'americas' } }"
+          :to="{ name: 'sub_region', params: { subregion: 'america' } }"
         >
           <b-col>
             <Card title="Americas" body="test" filename="americas.jpg" />
