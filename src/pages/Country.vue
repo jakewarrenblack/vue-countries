@@ -96,7 +96,7 @@
             v-for="attraction in paginated('attractions')"
             :key="attraction.xid"
           >
-            <b-card no-body class="overflow-hidden" style="max-height:25rem">
+            <b-card no-body class="overflow-hidden attraction-card" style="">
               <b-row no-gutters>
                 <b-col md="6">
                   <b-card-img
@@ -119,7 +119,7 @@
       </paginate>
       <b-row class="d-flex justify-content-center">
         <paginate-links
-          class="w-25 mylinks"
+          class="mylinks"
           for="attractions"
           :simple="{
             prev: '« Back',
@@ -327,28 +327,31 @@ export default {
         .catch((error) => console.log(error));
     },
     // unsplash is sometimes throwing a 403 forbidden, switch to pexels in that case
-    getImage(country) {
-      axios
+    async getImage(country) {
+      var that = this;
+      // if the call to unsplash fails, it will call to pexels instead
+      await axios
         .get(
           `https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country[0].name.common}`
         )
-        .then((response) => {
-          // 'full' is the hq option, but takes a while to load
-          this.heroImageSrc = response.data.results[0].urls.regular;
+        .then(function(response) {
+          that.heroImageSrc = response.data.results[0].urls.regular;
         })
         .catch(function(error) {
           console.log(error);
-          axios({
-            headers: {
-              Authorization:
-                "563492ad6f917000010000017537530b7b0b4f148a82df455487e0f1",
-            },
-          })
-            .get(`https://api.pexels.com/v1/search?query=test?query=${country}`)
-            .then(function(response) {
-              console.log("pexels response:");
-              console.log(response);
-            });
+          //call to pexels instead
+          //unsplash has good photos but rate limited to 50 per hour, pexels is 200
+          const URL = `https://api.pexels.com/v1/search?query=${country[0].name.common}&per_page=1&orientation=landscape`;
+          const API_KEY = `563492ad6f91700001000001660dc6de6e62494da4a3601ccfc6ecc3`;
+
+          axios
+            .get(URL, {
+              headers: { Authorization: `Bearer ${API_KEY}` },
+            })
+            .then((response) => {
+              that.heroImageSrc = response.data.photos[0].src.large2x;
+            })
+            .catch((error) => console.log(error));
         });
     },
     getEvents(countryCode) {
@@ -657,7 +660,7 @@ ul {
   border-radius: 11px;
   margin: 2rem 0;
   width: 100%;
-  height: 45rem;
+  height: 25rem;
   object-fit: cover;
 }
 
@@ -693,6 +696,10 @@ ul {
   width: 100%;
 }
 
+/* .attraction-card {
+  max-height: none;
+} */
+
 /* phones, tablets */
 @media screen and (min-width: 768px) {
   .weather {
@@ -703,6 +710,15 @@ ul {
   }
   .country-details {
     align-items: flex-end;
+  }
+  .attraction-card {
+    max-height: 25rem;
+  }
+  .paginate-links {
+    width: 25% !important;
+  }
+  .hero-image {
+    height: 45rem;
   }
 }
 
@@ -717,8 +733,18 @@ ul {
   cursor: pointer;
 }
 
+.paginate-links {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100%;
+}
+
 .paginate-list {
   padding-left: 0;
   padding-right: 0;
+}
+
+.carousel-caption p {
+  margin-bottom: 0;
 }
 </style>

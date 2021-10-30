@@ -49,8 +49,8 @@ export default {
           `https://api.ipgeolocation.io/timezone?apiKey=a1313e73c03e4c3288748d57b9e1e1b4&lat=${latlng[0]}&long=${latlng[1]}`
         )
         .then((response) => {
-          console.log(response.data);
-          console.log(response.data.time_12);
+          //console.log(response.data);
+          //console.log(response.data.time_12);
           this.time = response.data.time_12;
         })
         .catch((error) => console.log(error));
