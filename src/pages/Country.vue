@@ -60,28 +60,11 @@
         </b-col>
       </b-row>
 
-      <!-- google maps iframe embed -->
       <b-row>
-        <b-col>
-          <iframe
-            width="100%"
-            height="auto"
-            style="border:0; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 11px;
-            margin: 2rem 0;
-            height: 40rem;"
-            loading="lazy"
-            allowfullscreen
-            :src="
-              `https://www.google.com/maps/embed/v1/place?key=AIzaSyDZsVIH2Ih31ik3Xq7a9ZIJBv-JkbKIDGA%20%20%20%20
-            &q=${country[0].name.common}`
-            "
-          >
-          </iframe>
-        </b-col>
+        <GoogleMap :countryName="country[0].name.common" />
       </b-row>
 
-      <h1 class="mt-5 mb-4" v-if="events.length > 0">
+      <h1 class="mt-5 mb-4" v-if="attractions.length > 0">
         Attractions in {{ country[0].name.common }}
       </h1>
 
@@ -91,6 +74,7 @@
         :per="1"
         class="paginate-list"
       >
+        <!-- this horizontal card is different from the others, so not using the CountryCard component -->
         <b-row>
           <b-col
             v-for="attraction in paginated('attractions')"
@@ -131,34 +115,38 @@
       <h1 class="mt-5 mb-4" v-if="events.length > 0">
         Events in {{ country[0].name.common }}
       </h1>
-      <b-row
-        class="d-flex justify-content-center"
-        v-if="events.length > 0"
-        cols-sm="1"
-        cols-md="2"
-      >
-        <div
-          style="margin-bottom: 2rem"
-          v-for="event in events"
-          :key="event.id"
-        >
-          <b-col>
-            <b-card img-top tag="article" style="" class="mb-2">
-              <h2>{{ event.name }}</h2>
-              <img
-                :src="`${event.images[0].url}`"
-                style="height: 20rem; width: 100%;object-fit: cover;"
-              />
-              <h4 style="margin-top: 0.5rem; margin-bottom: 0.5rem">
-                {{ event._embedded.venues[0].name }}
-              </h4>
 
-              <b-button :href="`${event.url}`" target="_blank" variant="primary"
-                >View event</b-button
-              >
-            </b-card>
-          </b-col>
-        </div>
+      <paginate name="events" :list="events" :per="2" class="paginate-list">
+        <b-row
+          class="d-flex justify-content-start"
+          v-if="events.length > 0"
+          cols-sm="1"
+          cols-md="2"
+        >
+          <div
+            style="margin-bottom: 2rem"
+            v-for="event in paginated('events')"
+            :key="event.id"
+          >
+            <CountryCard
+              :title="event.name"
+              :src="`${event.images[0].url}`"
+              :venueName="event._embedded.venues[0].name"
+              :viewLink="event.url"
+            />
+          </div>
+        </b-row>
+      </paginate>
+
+      <b-row v-if="events.length > 1" class="d-flex justify-content-center">
+        <paginate-links
+          class="mylinks"
+          for="events"
+          :simple="{
+            prev: '« Back',
+            next: 'Next »',
+          }"
+        ></paginate-links>
       </b-row>
 
       <h1 class="mt-5 mb-4" v-if="foods.length > 0">
@@ -175,15 +163,7 @@
           v-for="food in foods"
           :key="food.idMeal"
         >
-          <b-col>
-            <b-card img-top tag="article" style="height:25rem;" class="mb-2">
-              <h2>{{ food.strMeal }}</h2>
-              <img
-                :src="`${food.strMealThumb}`"
-                style="height: 20rem; width: 100%;object-fit: cover;"
-              />
-            </b-card>
-          </b-col>
+          <CountryCard :title="food.strMeal" :src="food.strMealThumb" />
         </div>
       </b-row>
 
@@ -200,6 +180,7 @@
           News could not be loaded. This message will disappear in
           {{ dismissCountDown }} seconds...
         </p>
+
         <b-progress
           variant="warning"
           :max="dismissSecs"
@@ -207,10 +188,12 @@
           height="4px"
         ></b-progress>
       </b-alert>
+
       <div v-if="newsLoading" class="d-flex mt-5 mb-5">
         <h3 class="me-5">News is loading...</h3>
         <div class="loader" />
       </div>
+
       <h1 class="mt-5 mb-4" v-if="news.length > 0">
         Headlines in {{ country[0].name.common }}
       </h1>
@@ -225,25 +208,11 @@
           v-for="newsItem in news"
           :key="newsItem.headline"
         >
-          <b-col>
-            <b-card img-top tag="article" style="height:25rem;" class="mb-2">
-              <h1 style="height:20%;">{{ newsItem.author }}</h1>
-              <h4 style="height:20%;">{{ newsItem.headline }}</h4>
-              <!-- not all news articles have images, show placeholder instead -->
-              <div style="height:55%; padding-top:0.5rem">
-                <img
-                  :src="
-                    `${
-                      newsItem.image
-                        ? newsItem.image
-                        : require(`@/assets/placeholder.png`)
-                    }`
-                  "
-                  style="height:100%; width: 100%;object-fit: cover;"
-                />
-              </div>
-            </b-card>
-          </b-col>
+          <CountryCard
+            :title="newsItem.author"
+            :headline="newsItem.headline"
+            :src="newsItem.image"
+          />
         </div>
       </b-row>
     </b-container>
@@ -252,8 +221,15 @@
 
 <script>
 import axios from "axios";
+import GoogleMap from "@/components/GoogleMap";
+import CountryCard from "@/components/CountryCard";
+
 export default {
   name: "Country",
+  components: {
+    GoogleMap,
+    CountryCard,
+  },
   data() {
     return {
       country: [],
@@ -261,6 +237,7 @@ export default {
       languages: [],
       heroImageSrc: String,
       events: [],
+      paginate2: ["events"],
       foods: [],
       news: [],
       languageCode: String,
@@ -273,7 +250,7 @@ export default {
       dismissCountDown: 0,
       mapSrc: String,
       attractions: [],
-      paginate: ["attractions"],
+      paginate: ["attractions", "events"],
     };
   },
   // I was forcing a ui update this way, but switched to passing a :key to the router-view in App.vue
@@ -313,7 +290,7 @@ export default {
 
           this.country = response.data;
 
-          console.log(this.country);
+          //console.log(this.country);
 
           this.getImage(this.country);
           this.getWeather();
@@ -360,7 +337,8 @@ export default {
           `https://app.ticketmaster.com/discovery/v2/events.json?countryCode=${countryCode}&apikey=3ppB8CLW5dstXgxJirTmtYmcPr1fySNT`
         )
         .then((response) => {
-          for (var i = 0; i < 4; i++) {
+          console.log(response);
+          for (var i = 0; i < response.data._embedded.events.length; i++) {
             this.events.push(response.data._embedded.events[i]);
           }
         })
@@ -390,15 +368,8 @@ export default {
           // response.status != "fulfilled" ? (this.newsLoading = false) : "";
           var tempArticles = [];
 
-          // if (response.articles.length == 0) {
-          //   this.newsLoading = false;
-          //   // alert("News could not be loaded");
-          //   // this.showDismissableAlert = true;
-          //   this.showAlert();
-          //   return;
-          // }
-          console.log(response.data);
-          console.log(response.data.articles);
+          //console.log(response.data);
+          //console.log(response.data.articles);
 
           for (var i = 0; i < 4; i++) {
             if (
@@ -421,11 +392,11 @@ export default {
           }
 
           //this.news = tempArticles
-          console.log(response);
-          console.log(response.status);
+          //console.log(response);
+          //console.log(response.status);
 
           this.translate(tempArticles);
-          console.log(response);
+          //console.log(response);
           //return tempArticles
         })
         .catch(function(error) {
@@ -488,15 +459,16 @@ export default {
           .request(options)
           .then(function(response) {
             //console.log(q["headline"]);
-            console.log("MATCHES:");
-            console.log(response.data);
-            console.log(response.data.matches);
+            //console.log("MATCHES:");
+            //console.log(response.data);
+            //console.log(response.data.matches);
             q["headline"] = response.data.matches[0].translation;
             q["headline"] = q["headline"]
               // replace special chars
               .replace("&quot;", '"')
               .replace("&#39;", "'")
               .replace("&quot; ", '"')
+              .replace("&#39;;", "'")
               .replace("&#39; ", "'");
           })
           .catch(function(error) {
@@ -505,7 +477,7 @@ export default {
       }
       this.newsLoading = false;
       this.news = query;
-      console.log(this.news);
+      //console.log(this.news);
       //   for (var j = 0; j < this.articles.length; j++) {
       //     console.log(this.articles[j]);
       //   }
@@ -562,7 +534,7 @@ export default {
       var myAttractions = [];
       var myLatLng = [];
 
-      console.log("getattractions is running");
+      //console.log("getattractions is running");
       // specififying data from wikidata only, most others seem to often not have names
 
       // STEP 1 - SEARCH FOR THE PLACENAME
