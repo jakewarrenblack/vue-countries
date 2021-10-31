@@ -28,7 +28,7 @@
 
       <b-row class="d-flex justify-content-center">
         <paginate-links
-          class="w-25 mylinks"
+          class="mylinks"
           for="countries"
           :simple="{
             prev: '« Back',
@@ -80,14 +80,29 @@ export default {
 </script>
 
 <style scoped>
+/* phones, tablets */
+@media screen and (min-width: 768px) {
+  .paginate-links {
+    width: 25% !important;
+  }
+}
 .mylinks {
   list-style: none;
   display: flex;
   justify-content: space-evenly;
   font-size: 2rem;
-  color: rgb(115, 210, 241);
+  color: #1f7584;
 }
 .mylinks:hover {
   cursor: pointer;
+}
+.paginate-list {
+  padding-left: 0 !important;
+}
+
+.paginate-links {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100%;
 }
 </style>
