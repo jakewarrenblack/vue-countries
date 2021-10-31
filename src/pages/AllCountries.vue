@@ -59,6 +59,9 @@ export default {
   components: {
     CountryRegionCard,
   },
+  created() {
+    document.title = "All Countries";
+  },
   data() {
     return {
       countries: [],

@@ -242,6 +242,9 @@ export default {
     GoogleMap,
     CountryCard,
   },
+  created() {
+    document.title = "Country";
+  },
   data() {
     return {
       country: [],

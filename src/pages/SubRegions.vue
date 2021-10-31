@@ -59,6 +59,9 @@ export default {
       paginate: ["countries"],
     };
   },
+  created() {
+    document.title = "Sub Regions";
+  },
   mounted() {
     axios
       .get(

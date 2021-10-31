@@ -61,6 +61,9 @@ export default {
     Carousel,
     CountryRegionCard,
   },
+  created() {
+    document.title = "Home";
+  },
 };
 </script>
 
