@@ -28,6 +28,11 @@ export default {
   src: url("./assets/fonts/AlegreyaSans/AlegreyaSans-Bold.ttf");
 }
 
+@font-face {
+  font-family: "Open Sans Regular";
+  src: url("./assets/fonts/OpenSans/OpenSans-Regular.ttf");
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

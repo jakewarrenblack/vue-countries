@@ -7,41 +7,46 @@
         <h1>Countries by region</h1>
       </b-row>
       <b-row cols-md="5" cols-sm="1" class=" mx-auto w-75">
-        <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'europe' } }"
-        >
-          <b-col>
-            <Card title="Europe" body="test" filename="europe.jpg" />
-          </b-col>
-        </router-link>
-        <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'africa' } }"
-        >
-          <b-col>
-            <Card title="Africa" body="test" filename="africa.jpg" />
-          </b-col>
-        </router-link>
-        <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'asia' } }"
-        >
-          <b-col>
-            <Card title="Asia" body="test" filename="asia.jpg" />
-          </b-col>
-        </router-link>
-        <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'america' } }"
-        >
-          <b-col>
-            <Card title="Americas" body="test" filename="americas.jpg" />
-          </b-col>
-        </router-link>
-        <router-link
-          :to="{ name: 'sub_region', params: { subregion: 'australia' } }"
-        >
-          <b-col>
-            <Card title="Australia" body="test" filename="australia.jpg" />
-          </b-col>
-        </router-link>
+        <b-col>
+          <CountryRegionCard
+            title="Europe"
+            body="test"
+            filename="europe.jpg"
+            link="europe"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            title="Africa"
+            body="test"
+            filename="africa.jpg"
+            link="africa"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            title="Asia"
+            body="test"
+            filename="asia.jpg"
+            link="asia"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            title="Americas"
+            body="test"
+            filename="americas.jpg"
+            link="america"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            title="Australia"
+            body="test"
+            filename="australia.jpg"
+            link="australia"
+          />
+        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -49,12 +54,12 @@
 
 <script>
 import Carousel from "@/components/Carousel";
-import Card from "@/components/Card";
+import CountryRegionCard from "@/components/CountryRegionCard";
 export default {
   name: "Home",
   components: {
     Carousel,
-    Card,
+    CountryRegionCard,
   },
 };
 </script>
@@ -64,10 +69,10 @@ h1 {
   font-family: "Alegreya sans bold";
   padding: 2.5rem 0 2.5rem 15px;
 }
-.card {
+.HomeCard {
   transition: all ease-in-out 0.2s;
 }
-.card:hover {
+.HomeCard:hover {
   transform: translateY(-10px);
 }
 .carousel-caption {

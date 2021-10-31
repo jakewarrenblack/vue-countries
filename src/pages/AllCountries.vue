@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div style="position: relative; top:8rem;" class="container">
     <!-- so AllCountries makes the request, and ends up with an array of 250 countries -->
     <!-- then we loop and pass each country into a CountryViewer -->
     <!-- pass a prop like this -->
@@ -17,12 +17,11 @@
           cols-md="3"
           cols-lg="4"
         >
-          <CountryViewer
+          <CountryRegionCard
             class="m-2"
             v-for="country in paginated('countries')"
             :key="country.ccn3"
             :country="country"
-            :flag="country.flag"
           />
         </b-row>
       </paginate>
@@ -35,7 +34,7 @@
 
       <b-row class="d-flex justify-content-center">
         <paginate-links
-          class="w-25 mylinks"
+          class="mylinks"
           for="countries"
           :simple="{
             prev: '« Back',
@@ -49,7 +48,7 @@
 
 <script>
 import axios from "axios";
-import CountryViewer from "@/components/CountryViewer";
+import CountryRegionCard from "@/components/CountryRegionCard";
 // import {getCountries} from '../classes/Request'
 
 export default {
@@ -58,7 +57,7 @@ export default {
   // },
   name: "AllCountries",
   components: {
-    CountryViewer,
+    CountryRegionCard,
   },
   data() {
     return {
@@ -84,6 +83,12 @@ export default {
 </script>
 
 <style scoped>
+/* phones, tablets */
+@media screen and (min-width: 768px) {
+  .paginate-links {
+    width: 25% !important;
+  }
+}
 .mylinks {
   list-style: none;
   display: flex;
@@ -93,5 +98,14 @@ export default {
 }
 .mylinks:hover {
   cursor: pointer;
+}
+.paginate-list {
+  padding-left: 0 !important;
+}
+
+.paginate-links {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  width: 100%;
 }
 </style>

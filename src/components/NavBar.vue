@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex justify-content-center">
+  <div
+    class="d-flex justify-content-center"
+    style="position: fixed; top:0; width:100%; z-index:100;"
+  >
     <b-navbar class="w-75 mx-auto" toggleable="lg" type="dark" variant="info">
       <b-navbar-brand class="ms-5" href="#"
         ><img :src="require(`@/assets/restapi-planet.svg`)"
@@ -150,7 +153,6 @@ div {
   /* overriding some bootstrap nav defaults to style it according to our figma design */
   min-height: 5rem;
   font-family: "Alegreya Sans Bold";
-  padding: 2rem 0;
 
   /* position: absolute !important; */
   /* top: 0 !important;
@@ -165,6 +167,7 @@ div {
 @media screen and (min-width: 992px) {
   .navbar {
     position: relative;
+    /* padding: 2rem 0; */
   }
   .navbar-brand {
     position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div style="position: relative; top:8rem;" class="container">
     <!-- so AllCountries makes the request, and ends up with an array of 250 countries -->
     <!-- then we loop and pass each country into a CountryViewer -->
     <!-- pass a prop like this -->
@@ -17,12 +17,11 @@
           cols-md="3"
           cols-lg="4"
         >
-          <CountryViewer
+          <CountryRegionCard
             class="m-2"
             v-for="country in paginated('countries')"
             :key="country.ccn3"
             :country="country"
-            :flag="country.flag"
           />
         </b-row>
       </paginate>
@@ -43,7 +42,7 @@
 
 <script>
 import axios from "axios";
-import CountryViewer from "@/components/CountryViewer";
+import CountryRegionCard from "@/components/CountryRegionCard";
 // import {getCountries} from '../classes/Request'
 
 export default {
@@ -52,7 +51,7 @@ export default {
   // },
   name: "SubRegion",
   components: {
-    CountryViewer,
+    CountryRegionCard,
   },
   data() {
     return {

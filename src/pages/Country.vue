@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative; top:5rem;">
     <b-container>
       <b-row cols-md="2" cols-sm="1" align-h="between" class="mx-auto mt-5">
         <b-col>
@@ -101,7 +101,10 @@
           </b-col>
         </b-row>
       </paginate>
-      <b-row class="d-flex justify-content-center">
+      <b-row
+        v-if="attractions.length > 1"
+        class="d-flex justify-content-center"
+      >
         <paginate-links
           class="mylinks"
           for="attractions"
@@ -124,11 +127,13 @@
           cols-md="2"
         >
           <div
+            class="d-flex align-items-stretch"
             style="margin-bottom: 2rem"
             v-for="event in paginated('events')"
             :key="event.id"
           >
             <CountryCard
+              class="d-flex align-items-stretch"
               :title="event.name"
               :src="`${event.images[0].url}`"
               :venueName="event._embedded.venues[0].name"
@@ -138,7 +143,7 @@
         </b-row>
       </paginate>
 
-      <b-row v-if="events.length > 1" class="d-flex justify-content-center">
+      <b-row v-if="events.length > 2" class="d-flex justify-content-center">
         <paginate-links
           class="mylinks"
           for="events"
@@ -159,11 +164,16 @@
         cols-md="2"
       >
         <div
+          class="d-flex align-items-stretch"
           style="margin-bottom: 2rem"
           v-for="food in foods"
           :key="food.idMeal"
         >
-          <CountryCard :title="food.strMeal" :src="food.strMealThumb" />
+          <CountryCard
+            class="d-flex align-items-stretch"
+            :title="food.strMeal"
+            :src="food.strMealThumb"
+          />
         </div>
       </b-row>
 
@@ -204,11 +214,13 @@
         cols-md="2"
       >
         <div
+          class="d-flex align-items-stretch"
           style="margin-bottom: 2rem; align-items-stretch"
           v-for="newsItem in news"
           :key="newsItem.headline"
         >
           <CountryCard
+            class="d-flex align-items-stretch"
             :title="newsItem.author"
             :headline="newsItem.headline"
             :src="newsItem.image"
@@ -246,7 +258,7 @@ export default {
       temp: Number,
       newsLoading: false,
       showDismissableAlert: false,
-      dismissSecs: 5,
+      dismissSecs: 10,
       dismissCountDown: 0,
       mapSrc: String,
       attractions: [],

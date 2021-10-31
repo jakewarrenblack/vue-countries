@@ -1,6 +1,6 @@
 <template>
   <b-col>
-    <b-card img-top tag="article" style="" class="mb-2">
+    <b-card img-top tag="article" style="width:100%;" class="mb-2">
       <h1 style="height:20%;">{{ title }}</h1>
       <h4 v-if="headline" style="height:20%;">{{ headline }}</h4>
       <!-- not all news articles have images, show placeholder instead -->
