@@ -84,15 +84,22 @@
               <b-row no-gutters>
                 <b-col md="6">
                   <b-card-img
-                    :src="`${attraction.preview.source}`"
+                    :src="
+                      `${
+                        attraction.image != null &&
+                        attraction.image != undefined
+                          ? attraction.image
+                          : require('@/assets/placeholder.png')
+                      }`
+                    "
                     alt="Image"
                     class="rounded-0"
                   ></b-card-img>
                 </b-col>
                 <b-col md="6">
-                  <b-card-body :title="`${attraction.name}`">
+                  <b-card-body :title="`${attraction.title}`">
                     <b-card-text>
-                      {{ attraction.wikipedia_extracts.text }}
+                      {{ attraction.headline }}
                     </b-card-text>
                   </b-card-body>
                 </b-col>
@@ -280,13 +287,16 @@ export default {
   //     next()
   // },
   methods: {
+    created() {
+      console.log(this.attractions);
+    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
     },
-    getCountries() {
+    async getCountries() {
       axios
         .get(
           `https://restcountries.com/v3.1/name/${this.$route.params.country}/?fullText=true`
@@ -313,6 +323,8 @@ export default {
           this.getEvents(this.country[0].cca2);
           this.getFood(this.country[0].demonyms.eng.m);
           this.getNews(this.country[0].cca2);
+
+          console.log(this.attractions);
         })
         // first parameter of catch is always error, but we can name it whatever we want
         // obviously it just makes sense to call it 'error'
@@ -411,6 +423,7 @@ export default {
           //console.log(response.status);
 
           this.translate(tempArticles);
+
           //console.log(response);
           //return tempArticles
         })
@@ -450,14 +463,63 @@ export default {
       // de = an email to reach the user, mainly for commercial stuff
 
       // loop through the articles
-      for (var q of query) {
-        var options = {
+      // Don't waste words if it's already in English
+      // The api calculates your rate limit based on the number of words translated
+
+      if (typeof query != "object" && Array.isArray(query) && query !== null) {
+        for (var i = 0; i < query.length; i++) {
+          console.log(query[i]["headline"]);
+          var options = {
+            method: "GET",
+            url:
+              "https://translated-mymemory---translation-memory.p.rapidapi.com/api/get",
+            params: {
+              langpair: `${this.languageCode}|en`,
+              q: `${query[i]["headline"]}`,
+              mt: "1",
+              onlyprivate: "0",
+              de: "a@b.c",
+            },
+            headers: {
+              "x-rapidapi-host":
+                "translated-mymemory---translation-memory.p.rapidapi.com",
+              "x-rapidapi-key":
+                "35e471865cmsh6dfcf2dcedbf291p1036c8jsn06efc2036e45",
+            },
+          };
+
+          await axios
+            .request(options)
+            .then(function(response) {
+              //console.log(q["headline"]);
+              console.log("MATCHES:");
+              //console.log(response.data);
+              console.log(response.data.matches);
+              query[i]["headline"] = response.data.matches[0].translation;
+              query[i]["headline"] = query[i]["headline"]
+                // replace special chars
+                .replace("&quot;", '"')
+                .replace("&#39;", "'")
+                .replace("&quot; ", '"')
+                .replace("&#39;;", "'")
+                .replace("&#39; ", "'");
+            })
+            .catch(function(error) {
+              console.error(error);
+            });
+        }
+        this.newsLoading = false;
+        this.news = query;
+      }
+      // in this case, it must be an object, so it was passed in from the attractions method
+      else {
+        var attractionOptions = {
           method: "GET",
           url:
             "https://translated-mymemory---translation-memory.p.rapidapi.com/api/get",
           params: {
             langpair: `${this.languageCode}|en`,
-            q: `${q["headline"]}`,
+            q: `${query["headline"]}`,
             mt: "1",
             onlyprivate: "0",
             de: "a@b.c",
@@ -466,19 +528,19 @@ export default {
             "x-rapidapi-host":
               "translated-mymemory---translation-memory.p.rapidapi.com",
             "x-rapidapi-key":
-              "b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95",
+              "35e471865cmsh6dfcf2dcedbf291p1036c8jsn06efc2036e45",
           },
         };
 
         await axios
-          .request(options)
+          .request(attractionOptions)
           .then(function(response) {
             //console.log(q["headline"]);
-            //console.log("MATCHES:");
+            console.log("MATCHES:");
             //console.log(response.data);
-            //console.log(response.data.matches);
-            q["headline"] = response.data.matches[0].translation;
-            q["headline"] = q["headline"]
+            console.log(response.data.matches);
+            query["headline"] = response.data.matches[0].translation;
+            query["headline"] = query["headline"]
               // replace special chars
               .replace("&quot;", '"')
               .replace("&#39;", "'")
@@ -489,9 +551,17 @@ export default {
           .catch(function(error) {
             console.error(error);
           });
+        this.attractions.push(query);
+        console.log(query);
+        // if (typeof obj == "object") {
+
+        // }
       }
-      this.newsLoading = false;
-      this.news = query;
+
+      // console.log("TRANSLATED ATTRACTIONS:");
+      // console.log(query);
+      // console.log(query[0]);
+
       //console.log(this.news);
       //   for (var j = 0; j < this.articles.length; j++) {
       //     console.log(this.articles[j]);
@@ -564,6 +634,7 @@ export default {
         .catch((error) => console.log(error));
 
       // STEP 2 - SEARCH FOR THE ATTRACTIONS
+      //var tempAttractions = [];
       console.log(myLatLng);
       await axios
         .get(
@@ -575,17 +646,39 @@ export default {
 
           // STEP 3 - DETAILED WIKIPEDIA SEARCH FOR THE ATTRACTIONS
           //  ---------------------inner call ------------------------------
-          for (var i = 0; i < myAttractions.length; i++) {
+
+          for (var i = 0; i < 5; i++) {
             axios
               .get(
                 `https://api.opentripmap.com/0.1/en/places/xid/${myAttractions[i].properties.xid}?apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
               )
               .then((response) => {
                 console.log(response);
-                this.attractions.push(response.data);
+                //this.attractions.push(response.data);
+                var obj = {};
+                var headline = response.data.wikipedia_extracts.text;
+                var title = response.data.name;
+                var img = response.data.preview.source;
+                obj["headline"] = headline;
+                obj["title"] = title;
+                obj["image"] = img;
+                console.log(obj);
+                if (
+                  this.languageCode[0].toLowerCase() !== "en" &&
+                  this.languageCode[0].toLowerCase() !== "eng"
+                ) {
+                  if (typeof obj == "object") {
+                    this.translate(obj);
+                  }
+                } else {
+                  if (typeof obj == "object") {
+                    this.attractions.push(obj);
+                  }
+                }
               })
               .catch((error) => console.log(error));
           }
+
           //  ---------------------inner call ------------------------------
         })
         .catch((error) => console.log(error));
