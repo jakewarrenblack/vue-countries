@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="" class="theme-light">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,4 +14,23 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <style>
+
+    body,html {
+      background: var(--bgColor)!important;
+    }
+    /* Specific to exclude the region cards */
+    .attraction-card, article, a.m-2 .card, .news-row .card{
+      background:var(--cardColor)!important;
+    }
+    p,span,h1,h2,h3,h4,h5,h6,b{
+      color: var(--text)!important;
+    }
+    .myLinks, .paginate-links, .btn-primary, .region, .fa-icon{
+      color:var(--highlight)!important;
+    }
+  
+
+
+  </style>
 </html>

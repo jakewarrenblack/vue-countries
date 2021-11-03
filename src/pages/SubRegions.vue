@@ -86,6 +86,8 @@ export default {
     width: 25% !important;
   }
 }
+
+
 .mylinks {
   list-style: none;
   display: flex;

@@ -4,7 +4,7 @@
       `${
         country
           ? '/countries/' + country.name.official
-          : '/countries/subregion/' + title
+          : '/countries/subregion/' + (title == 'Americas' ? 'america' : title)
       }`
     "
   >
@@ -187,4 +187,12 @@ a.m-2 {
   justify-content: center;
   align-items: center;
 }
+
+
+
+.card{
+  background:var(--cardColor);
+  color:var(--text);
+}
+
 </style>
