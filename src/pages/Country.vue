@@ -708,9 +708,8 @@ h1 {
   margin-bottom: 0;
   padding-bottom: 0;
 }
-.region {
-  color: #1f7584;
-}
+
+
 .small-country-info {
   list-style: none;
   display: flex;
@@ -800,7 +799,7 @@ ul {
   display: flex;
   justify-content: space-evenly;
   font-size: 2rem;
-  color: #1f7584;
+  color: var(--highlight)!important;
 }
 .mylinks:hover {
   cursor: pointer;
@@ -819,5 +818,9 @@ ul {
 
 .carousel-caption p {
   margin-bottom: 0;
+}
+
+.fa-icon{
+  color:var(--cloud)!important;
 }
 </style>

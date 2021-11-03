@@ -9,6 +9,7 @@
       <b-row cols-md="5" cols-sm="1" class=" mx-auto w-75">
         <b-col>
           <CountryRegionCard
+            style="background:transparent!important"
             title="Europe"
             body="test"
             filename="europe.jpg"
@@ -17,6 +18,7 @@
         </b-col>
         <b-col>
           <CountryRegionCard
+            style="background:transparent!important"
             title="Africa"
             body="test"
             filename="africa.jpg"
@@ -25,6 +27,7 @@
         </b-col>
         <b-col>
           <CountryRegionCard
+            style="background:transparent!important"
             title="Asia"
             body="test"
             filename="asia.jpg"
@@ -33,6 +36,7 @@
         </b-col>
         <b-col>
           <CountryRegionCard
+            style="background:transparent!important"
             title="Americas"
             body="test"
             filename="americas.jpg"
@@ -41,6 +45,7 @@
         </b-col>
         <b-col>
           <CountryRegionCard
+            style="background:transparent!important"
             title="Australia"
             body="test"
             filename="australia.jpg"
@@ -75,6 +80,15 @@ h1 {
 .HomeCard {
   transition: all ease-in-out 0.2s;
 }
+
+.card{
+  background:transparent!important;
+}
+
+.region-title, .carousel-caption p{
+  color:white!important;
+}
+
 .HomeCard:hover {
   transform: translateY(-10px);
 }
@@ -94,6 +108,10 @@ h1 {
   object-fit: cover;
   /* so you can see the nav easily */
   filter: brightness(0.75);
+}
+
+.region-card{
+  max-width:18rem;
 }
 
 /* phones, tablets */

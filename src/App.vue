@@ -42,4 +42,19 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+
+:root{
+    --navbar: #181a3a;
+    --white:#f0f0f0;
+    --highlight:#39d0ea;
+    --bgColor:#0f1016;
+    --cardColor:#2d2078;
+}
+
+:root.dark-theme{
+    --navbar:#183a37;
+    --white:white;
+    --highlight: #1f7584;
+    --bgColor: white;
+}
 </style>
