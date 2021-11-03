@@ -386,7 +386,7 @@ export default {
       this.newsLoading = true;
       await axios
         .get(
-          `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=75e99a70acd44c50bb02cee29552e58c`
+          `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=9276e419e631406b93c202bd89ec993e`
         )
         .then((response) => {
           /* I may have to remove this, not sure. */
@@ -408,9 +408,11 @@ export default {
               return;
             }
             var obj = {};
+            var isNews = true;
             var headline = response.data.articles[i].title;
             var author = response.data.articles[i].source.name;
             var img = response.data.articles[i].urlToImage;
+            obj["isNews"] = isNews;
             obj["headline"] = headline;
             obj["author"] = author;
             obj["image"] = img;
@@ -422,7 +424,21 @@ export default {
           //console.log(response);
           //console.log(response.status);
 
-          this.translate(tempArticles);
+          if(tempArticles.length > 0 && tempArticles != null){
+            if(this.languageCode[0].toLowerCase() != "en" && this.languageCode[0].toLowerCase() != "eng"){
+                console.log('temp articles before translation')
+                console.log(tempArticles)
+                this.translate(tempArticles)
+                console.log('tyepeof')
+                      console.log(typeof(tempArticles))
+            }
+            else{
+              this.news = tempArticles;
+              this.newsLoading = false;
+            }
+          }
+              
+            
 
           //console.log(response);
           //return tempArticles
@@ -436,28 +452,29 @@ export default {
         });
     },
     async translate(query) {
-      // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
-      this.languageCode[0].toString().toLowerCase() == "fra"
-        ? (this.languageCode = "fr")
-        : "";
-      this.languageCode[0].toString().toLowerCase() == "deu"
-        ? (this.languageCode = "de")
-        : "";
+    //var that = this;
+      // // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
+      // this.languageCode[0].toString().toLowerCase() == "fra"
+      //   ? (this.languageCode = "fr")
+      //   : "";
+      // this.languageCode[0].toString().toLowerCase() == "deu"
+      //   ? (this.languageCode = "de")
+      //   : "";
 
-      //greek
-      this.languageCode[0].toString().toLowerCase() == "ell"
-        ? (this.languageCode = "gr")
-        : "";
+      // //greek
+      // this.languageCode[0].toString().toLowerCase() == "ell"
+      //   ? (this.languageCode = "gr")
+      //   : "";
 
-      //chinese
-      this.languageCode[0].toString().toLowerCase() == "zho"
-        ? (this.languageCode = "ch")
-        : "";
+      // //chinese
+      // this.languageCode[0].toString().toLowerCase() == "zho"
+      //   ? (this.languageCode = "ch")
+      //   : "";
 
-      //austria - german
-      this.languageCode[0].toString().toLowerCase() == "bar"
-        ? (this.languageCode = "de")
-        : "";
+      // //austria - german
+      // this.languageCode[0].toString().toLowerCase() == "bar"
+      //   ? (this.languageCode = "de")
+      //   : "";
 
       // mt = machine translation enabled
       // de = an email to reach the user, mainly for commercial stuff
@@ -466,36 +483,26 @@ export default {
       // Don't waste words if it's already in English
       // The api calculates your rate limit based on the number of words translated
 
-      if (typeof query != "object" && Array.isArray(query) && query !== null) {
+      if (query[0] != undefined && query[0] != null && query[0].isNews == true) {
+        console.log('news has reached type check')
+        console.log(query)
         for (var i = 0; i < query.length; i++) {
           console.log(query[i]["headline"]);
-          var options = {
-            method: "GET",
-            url:
-              "https://translated-mymemory---translation-memory.p.rapidapi.com/api/get",
-            params: {
-              langpair: `${this.languageCode}|en`,
-              q: `${query[i]["headline"]}`,
-              mt: "1",
-              onlyprivate: "0",
-              de: "a@b.c",
-            },
-            headers: {
-              "x-rapidapi-host":
-                "translated-mymemory---translation-memory.p.rapidapi.com",
-              "x-rapidapi-key":
-                "35e471865cmsh6dfcf2dcedbf291p1036c8jsn06efc2036e45",
-            },
-          };
 
-          await axios
-            .request(options)
-            .then(function(response) {
-              //console.log(q["headline"]);
-              console.log("MATCHES:");
-              //console.log(response.data);
-              console.log(response.data.matches);
-              query[i]["headline"] = response.data.matches[0].translation;
+          var options = {
+              method: 'POST',
+              url: 'https://cheap-translate.p.rapidapi.com/translate',
+              headers: {
+                'content-type': 'application/json',
+                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
+                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
+              },
+              data: {fromLang: 'auto-detect', text: `${query[i]["headline"]}`, to: 'en'}
+            };
+
+            await axios.request(options).then(function (response) {
+              console.log(response.data);
+              query[i]["headline"] = response.data.translatedText;
               query[i]["headline"] = query[i]["headline"]
                 // replace special chars
                 .replace("&quot;", '"')
@@ -503,54 +510,40 @@ export default {
                 .replace("&quot; ", '"')
                 .replace("&#39;;", "'")
                 .replace("&#39; ", "'");
-            })
-            .catch(function(error) {
+            }).catch(function (error) {
               console.error(error);
-            });
+          });
         }
         this.newsLoading = false;
         this.news = query;
       }
       // in this case, it must be an object, so it was passed in from the attractions method
       else {
-        var attractionOptions = {
-          method: "GET",
-          url:
-            "https://translated-mymemory---translation-memory.p.rapidapi.com/api/get",
-          params: {
-            langpair: `${this.languageCode}|en`,
-            q: `${query["headline"]}`,
-            mt: "1",
-            onlyprivate: "0",
-            de: "a@b.c",
-          },
-          headers: {
-            "x-rapidapi-host":
-              "translated-mymemory---translation-memory.p.rapidapi.com",
-            "x-rapidapi-key":
-              "35e471865cmsh6dfcf2dcedbf291p1036c8jsn06efc2036e45",
-          },
-        };
+          var optionsAttr = {
+              method: 'POST',
+              url: 'https://cheap-translate.p.rapidapi.com/translate',
+              headers: {
+                'content-type': 'application/json',
+                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
+                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
+              },
+              data: {fromLang: 'auto-detect', text: `${query["headline"]}`, to: 'en'}
+          }
 
-        await axios
-          .request(attractionOptions)
-          .then(function(response) {
-            //console.log(q["headline"]);
-            console.log("MATCHES:");
-            //console.log(response.data);
-            console.log(response.data.matches);
-            query["headline"] = response.data.matches[0].translation;
-            query["headline"] = query["headline"]
-              // replace special chars
-              .replace("&quot;", '"')
-              .replace("&#39;", "'")
-              .replace("&quot; ", '"')
-              .replace("&#39;;", "'")
-              .replace("&#39; ", "'");
-          })
-          .catch(function(error) {
-            console.error(error);
+           await axios.request(optionsAttr).then(function (response) {
+              console.log(response.data);
+              query["headline"] = response.data.translatedText;
+              query["headline"] = query[i]["headline"]
+                // replace special chars
+                .replace("&quot;", '"')
+                .replace("&#39;", "'")
+                .replace("&quot; ", '"')
+                .replace("&#39;;", "'")
+                .replace("&#39; ", "'");
+            }).catch(function (error) {
+              console.error(error);
           });
+
         this.attractions.push(query);
         console.log(query);
         // if (typeof obj == "object") {
