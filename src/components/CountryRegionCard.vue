@@ -4,7 +4,7 @@
       `${
         country
           ? '/countries/' + country.name.official
-          : '/countries/subregion/' + title
+          : '/countries/subregion/' + (title == 'Americas' ? 'america' : title)
       }`
     "
   >
