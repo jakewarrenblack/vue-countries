@@ -452,6 +452,8 @@ export default {
         });
     },
     async translate(query) {
+      
+
     //var that = this;
       // // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
       // this.languageCode[0].toString().toLowerCase() == "fra"
@@ -486,63 +488,70 @@ export default {
       if (query[0] != undefined && query[0] != null && query[0].isNews == true) {
         console.log('news has reached type check')
         console.log(query)
+
+
         for (var i = 0; i < query.length; i++) {
           console.log(query[i]["headline"]);
-
           var options = {
-              method: 'POST',
-              url: 'https://cheap-translate.p.rapidapi.com/translate',
-              headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
-                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
-              },
-              data: {fromLang: 'auto-detect', text: `${query[i]["headline"]}`, to: 'en'}
-            };
+            method: 'POST',
+            url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
+            params: {'api-version': '3.0', to: 'en', textType: 'plain', profanityAction: 'NoAction'},
+            headers: {
+              'content-type': 'application/json',
+              'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com',
+              'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
+            },
+            data: [{Text: `${query[i]["headline"]}`}]
+          };
 
-            await axios.request(options).then(function (response) {
-              console.log(response.data);
-              query[i]["headline"] = response.data.translatedText;
-              query[i]["headline"] = query[i]["headline"]
-                // replace special chars
-                .replace("&quot;", '"')
-                .replace("&#39;", "'")
-                .replace("&quot; ", '"')
-                .replace("&#39;;", "'")
-                .replace("&#39; ", "'");
-            }).catch(function (error) {
-              console.error(error);
+         await axios.request(options).then(function (response) {
+            console.log(response.data[0].translations[0].text);
+            query[i]["headline"] = response.data[0].translations[0].text;
+            query[i]["headline"] = query[i]["headline"]
+            // replace special chars
+            .replace("&quot;", '"')
+            .replace("&#39;", "'")
+            .replace("&quot; ", '"')
+            .replace("&#39;;", "'")
+            .replace("&#39; ", "'");
+          }).catch(function (error) {
+            console.error(error);
           });
+
         }
+
         this.newsLoading = false;
         this.news = query;
       }
       // in this case, it must be an object, so it was passed in from the attractions method
       else {
-          var optionsAttr = {
-              method: 'POST',
-              url: 'https://cheap-translate.p.rapidapi.com/translate',
-              headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
-                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
-              },
-              data: {fromLang: 'auto-detect', text: `${query["headline"]}`, to: 'en'}
-          }
 
-           await axios.request(optionsAttr).then(function (response) {
-              console.log(response.data);
-              query["headline"] = response.data.translatedText;
-              query["headline"] = query[i]["headline"]
+                  var optionsAttr = {
+          method: 'POST',
+          url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
+          params: {'api-version': '3.0', to: 'en', textType: 'plain', profanityAction: 'NoAction'},
+          headers: {
+            'content-type': 'application/json',
+            'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com',
+            'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
+          },
+          data: [{Text: `${query["headline"]}`}]
+        };
+
+        await axios.request(optionsAttr).then(function (response) {
+          console.log(response.data[0].translations[0].text);
+          query["headline"] = response.data[0].translations[0].text;
+              query["headline"] = query["headline"]
                 // replace special chars
                 .replace("&quot;", '"')
                 .replace("&#39;", "'")
                 .replace("&quot; ", '"')
                 .replace("&#39;;", "'")
                 .replace("&#39; ", "'");
-            }).catch(function (error) {
-              console.error(error);
-          });
+          
+        }).catch(function (error) {
+          console.error(error);
+        });
 
         this.attractions.push(query);
         console.log(query);
