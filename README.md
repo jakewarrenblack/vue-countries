@@ -20,7 +20,7 @@
 	<strong>Top headlines by country: </strong>Newsapi
 	</li>
 	<li>
-	<strong>News headlines translated from their local language to English where possible:</strong> translated--mymemory
+	<strong>News headlines and attraction descriptions translated from their local language to English where possible:</strong> Microsoft Translate API
 	</li>
 	<li>
 	<strong>Popular food by country: </strong>themealdb
