@@ -215,7 +215,7 @@
         Headlines in {{ country[0].name.common }}
       </h1>
       <b-row
-        class="d-flex justify-content-center"
+        class="d-flex justify-content-center news-row"
         v-if="news.length > 0"
         cols-sm="1"
         cols-md="2"
