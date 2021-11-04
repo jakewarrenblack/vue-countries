@@ -81,7 +81,6 @@ h1 {
   transition: all ease-in-out 0.2s;
 }
 
-<<<<<<< HEAD
 .card {
   background: transparent !important;
 }
@@ -89,14 +88,6 @@ h1 {
 .region-title,
 .carousel-caption p {
   color: white !important;
-=======
-.card{
-  background:transparent!important;
-}
-
-.region-title, .carousel-caption p{
-  color:white!important;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 }
 
 .HomeCard:hover {
@@ -120,13 +111,8 @@ h1 {
   filter: brightness(0.75);
 }
 
-<<<<<<< HEAD
 .region-card {
   max-width: 18rem;
-=======
-.region-card{
-  max-width:18rem;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 }
 
 /* phones, tablets */

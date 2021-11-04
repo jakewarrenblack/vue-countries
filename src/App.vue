@@ -43,7 +43,6 @@ export default {
   opacity: 0;
 }
 
-<<<<<<< HEAD
 :root {
   --navbar: #181a3a;
   --white: #f0f0f0;
@@ -57,20 +56,5 @@ export default {
   --white: white;
   --highlight: #1f7584;
   --bgColor: white;
-=======
-:root{
-    --navbar: #181a3a;
-    --white:#f0f0f0;
-    --highlight:#39d0ea;
-    --bgColor:#0f1016;
-    --cardColor:#2d2078;
-}
-
-:root.dark-theme{
-    --navbar:#183a37;
-    --white:white;
-    --highlight: #1f7584;
-    --bgColor: white;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 }
 </style>

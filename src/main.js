@@ -5,11 +5,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import VuePaginate from "vue-paginate";
-<<<<<<< HEAD
 import "./colors.css";
-=======
-import './colors.css'
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 Vue.config.productionTip = false;
 
 // importing icons for weather

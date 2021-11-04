@@ -108,7 +108,7 @@
 
       <paginate name="events" :list="events" :per="2" class="paginate-list">
         <b-row
-          class="d-flex justify-content-start"
+          class="d-flex justify-content-start events-food-row"
           v-if="events.length > 0"
           cols-sm="1"
           cols-md="2"
@@ -151,7 +151,7 @@
         cols-md="2"
       >
         <div
-          class="d-flex align-items-stretch"
+          class="d-flex align-items-stretch events-food-row"
           style="margin-bottom: 2rem"
           v-for="food in foods"
           :key="food.idMeal"
@@ -431,13 +431,7 @@ export default {
         });
     },
     async translate(query) {
-<<<<<<< HEAD
       //var that = this;
-=======
-      
-
-    //var that = this;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
       // // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
       // this.languageCode[0].toString().toLowerCase() == "fra"
       //   ? (this.languageCode = "fr")
@@ -468,7 +462,6 @@ export default {
       // Don't waste words if it's already in English
       // The api calculates your rate limit based on the number of words translated
 
-<<<<<<< HEAD
       if (
         query[0] != undefined &&
         query[0] != null &&
@@ -513,41 +506,6 @@ export default {
             .catch(function(error) {
               console.error(error);
             });
-=======
-      if (query[0] != undefined && query[0] != null && query[0].isNews == true) {
-        console.log('news has reached type check')
-        console.log(query)
-
-
-        for (var i = 0; i < query.length; i++) {
-          console.log(query[i]["headline"]);
-          var options = {
-            method: 'POST',
-            url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
-            params: {'api-version': '3.0', to: 'en', textType: 'plain', profanityAction: 'NoAction'},
-            headers: {
-              'content-type': 'application/json',
-              'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com',
-              'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
-            },
-            data: [{Text: `${query[i]["headline"]}`}]
-          };
-
-         await axios.request(options).then(function (response) {
-            console.log(response.data[0].translations[0].text);
-            query[i]["headline"] = response.data[0].translations[0].text;
-            query[i]["headline"] = query[i]["headline"]
-            // replace special chars
-            .replace("&quot;", '"')
-            .replace("&#39;", "'")
-            .replace("&quot; ", '"')
-            .replace("&#39;;", "'")
-            .replace("&#39; ", "'");
-          }).catch(function (error) {
-            console.error(error);
-          });
-
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
         }
 
         this.newsLoading = false;
@@ -555,7 +513,6 @@ export default {
       }
       // in this case, it must be an object, so it was passed in from the attractions method
       else {
-<<<<<<< HEAD
         var optionsAttr = {
           method: "POST",
           url: "https://microsoft-translator-text.p.rapidapi.com/translate",
@@ -590,35 +547,6 @@ export default {
           .catch(function(error) {
             console.error(error);
           });
-=======
-
-                  var optionsAttr = {
-          method: 'POST',
-          url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
-          params: {'api-version': '3.0', to: 'en', textType: 'plain', profanityAction: 'NoAction'},
-          headers: {
-            'content-type': 'application/json',
-            'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com',
-            'x-rapidapi-key': 'b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95'
-          },
-          data: [{Text: `${query["headline"]}`}]
-        };
-
-        await axios.request(optionsAttr).then(function (response) {
-          console.log(response.data[0].translations[0].text);
-          query["headline"] = response.data[0].translations[0].text;
-              query["headline"] = query["headline"]
-                // replace special chars
-                .replace("&quot;", '"')
-                .replace("&#39;", "'")
-                .replace("&quot; ", '"')
-                .replace("&#39;;", "'")
-                .replace("&#39; ", "'");
-          
-        }).catch(function (error) {
-          console.error(error);
-        });
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 
         this.attractions.push(query);
         //console.log(query);
@@ -785,10 +713,6 @@ h1 {
   padding-bottom: 0;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 .small-country-info {
   list-style: none;
   display: flex;
@@ -878,11 +802,7 @@ ul {
   display: flex;
   justify-content: space-evenly;
   font-size: 2rem;
-<<<<<<< HEAD
   color: var(--highlight) !important;
-=======
-  color: var(--highlight)!important;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 }
 .mylinks:hover {
   cursor: pointer;
@@ -903,12 +823,7 @@ ul {
   margin-bottom: 0;
 }
 
-<<<<<<< HEAD
 .fa-icon {
   color: var(--cloud) !important;
-=======
-.fa-icon{
-  color:var(--cloud)!important;
->>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 }
 </style>

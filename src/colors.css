@@ -1,19 +1,21 @@
-.theme-light{
-    --navbar: #183a37;
-    --text:black;
-    --highlight:#1f7584;
-    --bgColor:white;
-    --cardColor:white;
-    --navIcons: white;
-    --cloud:white;
+.theme-light {
+  --navbar: #183a37;
+  --text: black;
+  --highlight: #1f7584;
+  --bgColor: white;
+  --cardColor: white;
+  --navIcons: white;
+  --cloud: white;
+  --btnText: white;
 }
 
-.theme-dark{
-    --navbar:#181a3a;
-    --text:white;
-    --highlight: #39d0ea;
-    --bgColor: #0f1016;
-    --cardColor: #2d2078;
-    --navIcons: #39d0ea;
-    --cloud:#39d0ea;
+.theme-dark {
+  --navbar: #181a3a;
+  --text: white;
+  --highlight: #39d0ea;
+  --bgColor: #0f1016;
+  --cardColor: #2d2078;
+  --navIcons: #39d0ea;
+  --cloud: #39d0ea;
+  --btnText: black;
 }
