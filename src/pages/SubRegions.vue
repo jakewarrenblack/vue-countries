@@ -68,7 +68,7 @@ export default {
         `https://restcountries.com/v3.1/subregion/${this.$route.params.subregion}`
       )
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         // this.countries = response.data
         this.countries = response.data;
       })
@@ -86,6 +86,7 @@ export default {
     width: 25% !important;
   }
 }
+
 .mylinks {
   list-style: none;
   display: flex;

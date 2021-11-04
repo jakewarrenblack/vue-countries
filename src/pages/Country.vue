@@ -80,31 +80,11 @@
             v-for="attraction in paginated('attractions')"
             :key="attraction.xid"
           >
-            <b-card no-body class="overflow-hidden attraction-card" style="">
-              <b-row no-gutters>
-                <b-col md="6">
-                  <b-card-img
-                    :src="
-                      `${
-                        attraction.image != null &&
-                        attraction.image != undefined
-                          ? attraction.image
-                          : require('@/assets/placeholder.png')
-                      }`
-                    "
-                    alt="Image"
-                    class="rounded-0"
-                  ></b-card-img>
-                </b-col>
-                <b-col md="6">
-                  <b-card-body :title="`${attraction.title}`">
-                    <b-card-text>
-                      {{ attraction.headline }}
-                    </b-card-text>
-                  </b-card-body>
-                </b-col>
-              </b-row>
-            </b-card>
+            <CardHorizontal
+              :src="`${attraction.image}`"
+              :title="`${attraction.title}`"
+              :headline="`${attraction.headline}`"
+            />
           </b-col>
         </b-row>
       </paginate>
@@ -242,12 +222,14 @@
 import axios from "axios";
 import GoogleMap from "@/components/GoogleMap";
 import CountryCard from "@/components/CountryCard";
+import CardHorizontal from "@/components/CardHorizontal";
 
 export default {
   name: "Country",
   components: {
     GoogleMap,
     CountryCard,
+    CardHorizontal,
   },
   created() {
     document.title = "Country";
@@ -287,9 +269,6 @@ export default {
   //     next()
   // },
   methods: {
-    created() {
-      console.log(this.attractions);
-    },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
@@ -324,7 +303,7 @@ export default {
           this.getFood(this.country[0].demonyms.eng.m);
           this.getNews(this.country[0].cca2);
 
-          console.log(this.attractions);
+          //console.log(this.attractions);
         })
         // first parameter of catch is always error, but we can name it whatever we want
         // obviously it just makes sense to call it 'error'
@@ -424,21 +403,21 @@ export default {
           //console.log(response);
           //console.log(response.status);
 
-          if(tempArticles.length > 0 && tempArticles != null){
-            if(this.languageCode[0].toLowerCase() != "en" && this.languageCode[0].toLowerCase() != "eng"){
-                console.log('temp articles before translation')
-                console.log(tempArticles)
-                this.translate(tempArticles)
-                console.log('tyepeof')
-                      console.log(typeof(tempArticles))
-            }
-            else{
+          if (tempArticles.length > 0 && tempArticles != null) {
+            if (
+              this.languageCode[0].toLowerCase() != "en" &&
+              this.languageCode[0].toLowerCase() != "eng"
+            ) {
+              // console.log('temp articles before translation')
+              // console.log(tempArticles)
+              this.translate(tempArticles);
+              // console.log('tyepeof')
+              // console.log(typeof(tempArticles))
+            } else {
               this.news = tempArticles;
               this.newsLoading = false;
             }
           }
-              
-            
 
           //console.log(response);
           //return tempArticles
@@ -452,7 +431,7 @@ export default {
         });
     },
     async translate(query) {
-    //var that = this;
+      //var that = this;
       // // -- not all language codes are correct, making adjustment for common languages I notice to be wrong -- //
       // this.languageCode[0].toString().toLowerCase() == "fra"
       //   ? (this.languageCode = "fr")
@@ -483,26 +462,39 @@ export default {
       // Don't waste words if it's already in English
       // The api calculates your rate limit based on the number of words translated
 
-      if (query[0] != undefined && query[0] != null && query[0].isNews == true) {
-        console.log('news has reached type check')
-        console.log(query)
+      if (
+        query[0] != undefined &&
+        query[0] != null &&
+        query[0].isNews == true
+      ) {
+        //console.log('news has reached type check')
+        //console.log(query)
+
         for (var i = 0; i < query.length; i++) {
-          console.log(query[i]["headline"]);
-
+          //console.log(query[i]["headline"]);
           var options = {
-              method: 'POST',
-              url: 'https://cheap-translate.p.rapidapi.com/translate',
-              headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
-                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
-              },
-              data: {fromLang: 'auto-detect', text: `${query[i]["headline"]}`, to: 'en'}
-            };
+            method: "POST",
+            url: "https://microsoft-translator-text.p.rapidapi.com/translate",
+            params: {
+              "api-version": "3.0",
+              to: "en",
+              textType: "plain",
+              profanityAction: "NoAction",
+            },
+            headers: {
+              "content-type": "application/json",
+              "x-rapidapi-host": "microsoft-translator-text.p.rapidapi.com",
+              "x-rapidapi-key":
+                "b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95",
+            },
+            data: [{ Text: `${query[i]["headline"]}` }],
+          };
 
-            await axios.request(options).then(function (response) {
-              console.log(response.data);
-              query[i]["headline"] = response.data.translatedText;
+          await axios
+            .request(options)
+            .then(function(response) {
+              //console.log(response.data[0].translations[0].text);
+              query[i]["headline"] = response.data[0].translations[0].text;
               query[i]["headline"] = query[i]["headline"]
                 // replace special chars
                 .replace("&quot;", '"')
@@ -510,42 +502,54 @@ export default {
                 .replace("&quot; ", '"')
                 .replace("&#39;;", "'")
                 .replace("&#39; ", "'");
-            }).catch(function (error) {
+            })
+            .catch(function(error) {
               console.error(error);
-          });
+            });
         }
+
         this.newsLoading = false;
         this.news = query;
       }
       // in this case, it must be an object, so it was passed in from the attractions method
       else {
-          var optionsAttr = {
-              method: 'POST',
-              url: 'https://cheap-translate.p.rapidapi.com/translate',
-              headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'cheap-translate.p.rapidapi.com',
-                'x-rapidapi-key': 'bd421f5e0emshf9c34b12ca55bacp166b88jsn25ce79946f3e'
-              },
-              data: {fromLang: 'auto-detect', text: `${query["headline"]}`, to: 'en'}
-          }
+        var optionsAttr = {
+          method: "POST",
+          url: "https://microsoft-translator-text.p.rapidapi.com/translate",
+          params: {
+            "api-version": "3.0",
+            to: "en",
+            textType: "plain",
+            profanityAction: "NoAction",
+          },
+          headers: {
+            "content-type": "application/json",
+            "x-rapidapi-host": "microsoft-translator-text.p.rapidapi.com",
+            "x-rapidapi-key":
+              "b6e8418e67msh608d96d57176776p179c32jsnc45f9e8caf95",
+          },
+          data: [{ Text: `${query["headline"]}` }],
+        };
 
-           await axios.request(optionsAttr).then(function (response) {
-              console.log(response.data);
-              query["headline"] = response.data.translatedText;
-              query["headline"] = query[i]["headline"]
-                // replace special chars
-                .replace("&quot;", '"')
-                .replace("&#39;", "'")
-                .replace("&quot; ", '"')
-                .replace("&#39;;", "'")
-                .replace("&#39; ", "'");
-            }).catch(function (error) {
-              console.error(error);
+        await axios
+          .request(optionsAttr)
+          .then(function(response) {
+            //console.log(response.data[0].translations[0].text);
+            query["headline"] = response.data[0].translations[0].text;
+            query["headline"] = query["headline"]
+              // replace special chars
+              .replace("&quot;", '"')
+              .replace("&#39;", "'")
+              .replace("&quot; ", '"')
+              .replace("&#39;;", "'")
+              .replace("&#39; ", "'");
+          })
+          .catch(function(error) {
+            console.error(error);
           });
 
         this.attractions.push(query);
-        console.log(query);
+        //console.log(query);
         // if (typeof obj == "object") {
 
         // }
@@ -628,7 +632,7 @@ export default {
 
       // STEP 2 - SEARCH FOR THE ATTRACTIONS
       //var tempAttractions = [];
-      console.log(myLatLng);
+      //console.log(myLatLng);
       await axios
         .get(
           `https://api.opentripmap.com/0.1/en/places/radius?radius=48280.32&lon=${myLatLng[1]}&lat=${myLatLng[0]}&limit=10&src_geom=wikidata&src_attr=wikidata&limit=10&rate=3&limit=6&apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
@@ -646,7 +650,7 @@ export default {
                 `https://api.opentripmap.com/0.1/en/places/xid/${myAttractions[i].properties.xid}?apikey=5ae2e3f221c38a28845f05b6b3406926bcb4694531427c70c317b945`
               )
               .then((response) => {
-                console.log(response);
+                //console.log(response);
                 //this.attractions.push(response.data);
                 var obj = {};
                 var headline = response.data.wikipedia_extracts.text;
@@ -655,13 +659,13 @@ export default {
                 obj["headline"] = headline;
                 obj["title"] = title;
                 obj["image"] = img;
-                console.log(obj);
+                //console.log(obj);
                 if (
                   this.languageCode[0].toLowerCase() !== "en" &&
                   this.languageCode[0].toLowerCase() !== "eng"
                 ) {
                   if (typeof obj == "object") {
-                    this.translate(obj);
+                    //this.translate(obj);
                   }
                 } else {
                   if (typeof obj == "object") {
@@ -708,9 +712,7 @@ h1 {
   margin-bottom: 0;
   padding-bottom: 0;
 }
-.region {
-  color: #1f7584;
-}
+
 .small-country-info {
   list-style: none;
   display: flex;
@@ -800,7 +802,7 @@ ul {
   display: flex;
   justify-content: space-evenly;
   font-size: 2rem;
-  color: #1f7584;
+  color: var(--highlight) !important;
 }
 .mylinks:hover {
   cursor: pointer;
@@ -819,5 +821,9 @@ ul {
 
 .carousel-caption p {
   margin-bottom: 0;
+}
+
+.fa-icon {
+  color: var(--cloud) !important;
 }
 </style>

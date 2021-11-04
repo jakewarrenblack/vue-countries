@@ -140,6 +140,7 @@ export default {
           `https://api.unsplash.com/search/photos/?client_id=9LhVwLjJrdIy5jX3svklsUACp0mByDjsrzbJNTZGAqg&query=${country}`
         )
         .then(function(response) {
+          //(response);
           console.log(response);
           var imageSrc = response.data.results[0].urls.full;
           that.finalCountries.set(country, imageSrc);
@@ -156,14 +157,14 @@ export default {
               headers: { Authorization: `Bearer ${API_KEY}` },
             })
             .then((response) => {
-              console.log(response);
+              //console.log(response);
               for (var i = 0; i < response.data.photos.length; i++) {
                 that.finalCountries.set(
                   country,
                   response.data.photos[i].src.large2x
                 );
               }
-              console.log(that.finalCountries);
+              //console.log(that.finalCountries);
             })
             .catch((error) => console.log(error));
         });
