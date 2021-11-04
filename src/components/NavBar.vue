@@ -23,6 +23,7 @@
 
           <b-nav-item @click="getRandomCountry()" href="#">Random</b-nav-item>
 
+<<<<<<< HEAD
           <b-nav-item>
             <font-awesome-icon
               @click="toggleTheme()"
@@ -30,6 +31,12 @@
               :icon="`${this.theme == 'light' ? 'sun' : 'moon'}`"
             />
           </b-nav-item>
+=======
+        <b-nav-item>
+          <font-awesome-icon @click="toggleTheme()" class="fa-icon" :icon="`${this.theme == 'light' ? 'sun' : 'moon'}`" />
+        </b-nav-item>
+
+>>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -54,6 +61,8 @@
               <font-awesome-icon class="fa-icon" :icon="`${this.icon}`" />
             </b-button>
           </b-nav-form>
+
+        
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -70,7 +79,11 @@ export default {
       cloud: "moon",
       search_term: "",
       icon: "search",
+<<<<<<< HEAD
       theme: "light",
+=======
+      theme: 'light',
+>>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
     };
   },
   methods: {
@@ -136,6 +149,7 @@ export default {
           alert("Sorry, that country name is invalid.");
         });
     },
+<<<<<<< HEAD
     toggleTheme() {
       if (this.theme == "dark") {
         this.theme = "light";
@@ -151,6 +165,23 @@ export default {
         document.documentElement.classList.remove("theme-light");
       }
     },
+=======
+			toggleTheme() {
+				if (this.theme == "dark") {
+					this.theme = "light";
+          document.body.classList.add("theme-light")
+          document.body.classList.remove("theme-dark")
+          document.documentElement.classList.add("theme-light")
+          document.documentElement.classList.remove("theme-dark")
+				} else {
+					this.theme = "dark";
+          document.body.classList.add("theme-dark")
+          document.body.classList.remove("theme-light")
+          document.documentElement.classList.add("theme-dark")
+          document.documentElement.classList.remove("theme-light")
+				}
+			}
+>>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
   },
 };
 </script>
@@ -204,6 +235,7 @@ div {
   }
 }
 
+<<<<<<< HEAD
 div,
 .bg-info {
   background: var(--navbar) !important;
@@ -211,4 +243,14 @@ div,
 .fa-icon {
   color: var(--navIcons) !important;
 }
+=======
+
+	div, .bg-info {
+		background: var(--navbar)!important
+	}
+  .fa-icon{
+    color:var(--navIcons)!important;
+  }
+
+>>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 </style>

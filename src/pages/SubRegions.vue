@@ -87,6 +87,10 @@ export default {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 88ef4570808bf8d38454e3b44bad97b3ed128491
 .mylinks {
   list-style: none;
   display: flex;
