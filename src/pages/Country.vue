@@ -365,7 +365,7 @@ export default {
       this.newsLoading = true;
       await axios
         .get(
-          `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=9276e419e631406b93c202bd89ec993e`
+          `https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=6b4b9697546d466db802b24a443cf9a6`
         )
         .then((response) => {
           /* I may have to remove this, not sure. */
