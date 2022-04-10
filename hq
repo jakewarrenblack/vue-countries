@@ -1,0 +1,170 @@
+[33mcommit 681173bf7983d5ffcc7a07a95ba71390ff70c5a6[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sun Oct 31 00:05:46 2021 +0100
+
+    Update insomnia file and media queries for homepage hero-text
+
+[33mcommit 662b0c860588771193d2150f8792ddcdb1e045bb[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 22:50:00 2021 +0100
+
+    Improve media queries for events on single country. Add backup axios call to pexels in event unsplash returns no data for single country hero image.
+
+[33mcommit 6e138fbf2d7c51f7e41e42bfb278610100002e80[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 21:39:56 2021 +0100
+
+    Carousel - A call is now made to pexels in the event unsplash returns no data
+
+[33mcommit 4563c4fc79a25970f8861bd7eafe5f52157b3ef8[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 19:30:01 2021 +0100
+
+    Correct typo in router params for 'americas'
+
+[33mcommit e1041c9a32ee3045de70d5387f6e4591be09e7e2[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 19:17:00 2021 +0100
+
+    Now retrieving current time for allcountries page. Making 3 chained calls to opentripmap to create a list of attractions near each location.
+
+[33mcommit c8afb46a35f5f6b57ae7c3927616694a3c67ada4[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 01:48:06 2021 +0100
+
+    Add random country button
+
+[33mcommit fa0162aa58a7ae69035b5ef0204182815b51a46e[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Sat Oct 30 00:16:18 2021 +0100
+
+    Added a dismissable message for when an error is thrown while fetching news. News is still very buggy, it does not work for every country. Suspecting there is some issue with how I'm using async functions.
+
+[33mcommit 9020c3d1d86e30a748673e78d7de172d497e1a47[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Fri Oct 29 22:11:55 2021 +0100
+
+    Update styling for navbar, create files necessary for firebase deploy
+
+[33mcommit 90885eae29c94da635d4d7be27f7f8f5cf3616f7[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Fri Oct 29 19:49:22 2021 +0100
+
+    Add fade transitions between pages and pagination on all countries/regions pages.
+
+[33mcommit f2089cab4b44e69a8b1c218d1d85cad11acc17b7[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Fri Oct 29 01:13:26 2021 +0100
+
+    Add Google Maps embed to country page. Add loader for news articles.
+
+[33mcommit 3b21c37824ee0cee40d98f9957bd082211c3b5cd[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 22:02:19 2021 +0100
+
+    Loader is now displayed while news articles are being fetched/translated
+
+[33mcommit fce517132d1086732a623bbcda9261091372a7dc[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 21:14:25 2021 +0100
+
+    Subregions now incorporated into search function.
+
+[33mcommit 403f7123d386afca98cac966b90be82f8ef2b135[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 18:54:59 2021 +0100
+
+    Progress on incorporating regions into navbar search functionality.
+
+[33mcommit 2608e33d751aa91f89736df275d7b314ac2ceb35[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 18:44:54 2021 +0100
+
+    Create regions page, wrap home cards in router links. Switch images to medium sized. Starting to allow for region searches in navbar
+
+[33mcommit 9729f6cab5d071dba4254d30813c60d2be1482b9[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 15:27:08 2021 +0100
+
+    Update Vue Countries Insomnia file
+
+[33mcommit e9f12af5afbd715ae81bdcec3ab87a75a561bd14[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 15:15:23 2021 +0100
+
+    News articles are now translated from their local language to English.
+
+[33mcommit 1d34a90132ccf263c307936af40ce7350f8a0b81[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 14:14:33 2021 +0100
+
+    Add dynamic carousel to homepage, which pulls in 4 random countries and corresponding images from unsplash.
+
+[33mcommit fc4c46c52aecc872da487666636833fe5f84a3c5[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 28 00:18:53 2021 +0100
+
+    Add openweathermap search and fontawesome icons to correspond with weather icon codes. Add Alegreya Sans font.
+
+[33mcommit 385b4c1c68714c82a725d55da507d7e1ef70228b[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Wed Oct 27 16:19:38 2021 +0100
+
+    Search functionality now fully implemented with working error checking.
+    - Navbar now submits using @submit rather than button click or keyup on enter.
+    - Default form behaviour is prevented to run the search function rather than refreshing, which caused axios to abort its call.
+    - App.vue updated to provide $route.fullPath to router-view as a key, which forces a ui update when a navigation change occurs, this was necessary to update the ui when a search is made on the single country page.
+
+[33mcommit b2244be4c191c1f997fc0fe6f00b7ccca1c5f242[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Wed Oct 27 00:37:08 2021 +0100
+
+    Add search functionality to NavBar. No error checking on this yet. Downgrade Bootstrap to v4.5.3 attempting to add toast to NavBar.
+
+[33mcommit 7b021e7fa58be508bc192407304abde13a4e9400[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Tue Oct 26 21:30:44 2021 +0100
+
+    • Create carousel, navbar, and card components. Add these components to
+    the homepage.
+    • Convert AllCountries page to use Bootstrap cards, and to show png flag
+    rather than emoji.
+    • Updated single country page to make requests to the following
+    APIs:
+    - Unsplash for hero image
+    - Newsapi for headlines
+    - themealdb for popular meals
+    - ticketmaster for events in each country
+    • I have also added a function to connect to a language translation API
+    for translating news headlines from their local language to English.
+    This does not work as of yet.
+
+[33mcommit 621c0e892610f7788931cde641cc318a754791f2[m
+Author: Jake <jakewarrenblack01@gmail.com>
+Date:   Thu Oct 21 14:31:35 2021 +0100
+
+    Add request file with all api calls
+
+[33mcommit 1465b1540fe35a81aac79f197a898e3bc18ccfe3[m
+Author: jakewarrenblack <47800618+jakewarrenblack@users.noreply.github.com>
+Date:   Tue Oct 19 22:43:35 2021 +0100
+
+    Add Vue Countries Insomnia collection
+
+[33mcommit fdbb2c411dffd5c9f003ebf298b30c98758a8a5f[m
+Author: Jake Black (Student) <N00193326@iadt.ie>
+Date:   Thu Oct 14 15:00:11 2021 +0100
+
+    Pull data from API, create routes to homepage and countries. Create navbar and countryviewer component
+
+[33mcommit ec30ac02c060c0d872f1d7b8ca3f3703de6642ee[m
+Author: Jake Black (Student) <N00193326@iadt.ie>
+Date:   Thu Oct 14 13:02:11 2021 +0100
+
+    Initial commit
+
+[33mcommit 08c95d2f89ec3ef3a5c1eec1055396d5ba15986f[m
+Author: Jake Black (Student) <N00193326@iadt.ie>
+Date:   Thu Oct 14 12:45:17 2021 +0100
+
+    init

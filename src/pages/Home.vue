@@ -1,95 +1,124 @@
 <template>
-  <div
-    v-if="!loggedIn"
-    class="d-flex justify-content-center align-items-center flex-column"
-    style="height: 100vh"
-  >
-    <h1 class="mb-5">M.A. Maddock login</h1>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-        description="We'll never share your email with anyone else."
-      >
-        <b-form-input
-          id="input-1"
-          v-model="form.email"
-          type="email"
-          placeholder="Enter email"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        class="mt-5"
-        id="input-group-2"
-        label="Your Password:"
-        label-for="input-2"
-      >
-        <b-form-input
-          id="input-2"
-          v-model="form.password"
-          type="password"
-          placeholder="Enter password"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        class="mt-5"
-        id="input-group-3"
-        label="Your Name:"
-        label-for="input-3"
-      >
-        <b-form-input
-          id="input-3"
-          v-model="form.fullName"
-          placeholder="Enter name"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-      <div class="mt-5 d-flex justify-content-around">
-        <b-button type="submit" @click.prevent="login(form)" variant="primary"
-          >Submit</b-button
-        >
-        <b-button type="reset" variant="danger">Reset</b-button>
-      </div>
-    </b-form>
-  </div>
-  <div v-else>
-    <h1>Welcome, you're logged in!</h1>
+  <div>
+    <Carousel />
+    <br />
+    <b-container fluid class="bv-example-row mb-3">
+      <b-row class="mx-auto w-75">
+        <h1>Countries by region</h1>
+      </b-row>
+      <b-row cols-md="5" cols-sm="1" class=" mx-auto w-75">
+        <b-col>
+          <CountryRegionCard
+            style="background:transparent!important"
+            title="Europe"
+            body="test"
+            filename="europe.jpg"
+            link="europe"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            style="background:transparent!important"
+            title="Africa"
+            body="test"
+            filename="africa.jpg"
+            link="africa"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            style="background:transparent!important"
+            title="Asia"
+            body="test"
+            filename="asia.jpg"
+            link="asia"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            style="background:transparent!important"
+            title="Americas"
+            body="test"
+            filename="americas.jpg"
+            link="america"
+          />
+        </b-col>
+        <b-col>
+          <CountryRegionCard
+            style="background:transparent!important"
+            title="Australia"
+            body="test"
+            filename="australia.jpg"
+            link="australia"
+          />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import Carousel from "@/components/Carousel";
+import CountryRegionCard from "@/components/CountryRegionCard";
 export default {
-  computed: {
-    ...mapState(["loggedIn"]),
-  },
   name: "Home",
-  components: {},
-  data() {
-    return {
-      show: true,
-      form: {
-        fullName: null,
-        email: null,
-        password: null,
-      },
-    };
+  components: {
+    Carousel,
+    CountryRegionCard,
   },
   created() {
     document.title = "Home";
   },
-  methods: {
-    ...mapActions(["login", "register"]),
-    onReset() {},
-    onSubmit() {},
-  },
 };
 </script>
 
-<style></style>
+<style>
+h1 {
+  font-family: "Alegreya sans bold";
+  padding: 2.5rem 0 2.5rem 15px;
+}
+.HomeCard {
+  transition: all ease-in-out 0.2s;
+}
+
+.card {
+  background: transparent !important;
+}
+
+.region-title,
+.carousel-caption p {
+  color: white !important;
+}
+
+.HomeCard:hover {
+  transform: translateY(-10px);
+}
+.carousel-caption {
+  bottom: 37% !important;
+  text-align: left !important;
+  font-size: 2.5rem !important;
+  font-family: "Alegreya sans bold" !important;
+}
+
+.carousel-item {
+  height: 70vh;
+}
+
+.carousel-item img {
+  height: 100%;
+  object-fit: cover;
+  /* so you can see the nav easily */
+  filter: brightness(0.75);
+}
+
+.region-card {
+  max-width: 18rem;
+}
+
+/* phones, tablets */
+@media screen and (min-width: 768px) {
+  .carousel-caption {
+    font-size: 5rem !important;
+  }
+}
+</style>
